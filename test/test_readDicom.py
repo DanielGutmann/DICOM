@@ -27,5 +27,6 @@ class readDicomTest(unittest.TestCase):
         else:
             self.fail('Did not see StopIteration')
 
+
 if __name__ == '__main__':
     unittest.main()

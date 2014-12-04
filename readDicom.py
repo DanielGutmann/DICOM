@@ -26,8 +26,22 @@ class ReadDirWithDicom(object):
     def get_all_slices_in_3D(self):
         return  self.Image3D
 
+
 class ReadDirWithBinaryData(object):
 
     def __init__(self, path):
-        my_path=path
-        np.fromfile(my_path+.)
+        my_path = path
+        self.mata_bin = open(my_path+'hdr_CT.bin.txt')
+        self.width = int(self.mata_bin.readline().split(' = ')[1][:-2])
+        self.hight = int(self.mata_bin.readline().split(' = ')[1][:-2])
+        self.depth = int(self.mata_bin.readline().split(' = ')[1][:-2])
+        self.data_type = self.mata_bin.readline().split(' = ')[1][:-2]
+        self.Image3D = np.reshape(np.fromfile(my_path+'CT.bin',dtype= np.float32),(self.width,self.hight,self.depth))
+        self.spaceing = np.fromfile(my_path+'spacing.txt',dtype= self.data_type, sep="    ")
+        print('Reading data done')
+
+    def get_image3D(self):
+        return self.Image3D
+
+    def get_spacing(self):
+        return self.spaceing
