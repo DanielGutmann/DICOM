@@ -8,49 +8,49 @@ import numpy as np
 # LoG=LoGcontatnt*(r^2/sigma^2 -3)*e^-r^2/(2*sigma^2) ,where r is in [mm]
 
 class LoG(object):
-    def __init__(self,sigma):
-        three_sigma= 3.0*sigma
-        self.sigma=sigma
-        x = np.arange(-three_sigma,three_sigma, 0.1)
-        y = np.arange(-three_sigma,three_sigma, 0.1)
-        z = np.arange(-three_sigma,three_sigma, 0.1)
+    def __init__(self, sigma):
+        three_sigma = 3.0 * sigma
+        self.sigma = sigma
+        self.x = np.arange(-three_sigma, three_sigma, 0.2)
+        self.y = np.arange(-three_sigma, three_sigma, 0.2)
+        self.z = np.arange(-three_sigma, three_sigma, 0.2)
 
-        self.X, self.Y, self.Z= np.meshgrid(x, y,z )
+        self.X, self.Y, self.Z = np.meshgrid(self.x, self.y, self.z)
 
 
-
-    def __call__(self, sigma):
-
+    def get_LoG(self, sigma):
         sigma_square = self.sigma ** 2
         LoGcontant = 1.0 / (2.0 * pi * (sigma_square ** 2))
-        R_square = self.X ** 2 + self.Y ** 2+self.Z ** 2
+        R_square = self.X ** 2 + self.Y ** 2 + self.Z ** 2
 
-        exponetnta=np.exp(-R_square /(2 * sigma_square))
-        LoG = LoGcontant * (R_square / sigma_square - 2) * exponetnta
-        LoG_normalized = LoG/np.sum(LoG)
+        exponenta = np.exp(-R_square / (2 * sigma_square))
+        LoG = LoGcontant * (R_square / sigma_square - 2) * exponenta
+        LoG_normalized = LoG / np.sum(LoG)
 
         return LoG_normalized
-
+    def get_grid_x_y_z(self):
+        return self.x,self.y,self.z
 
 class LoG2D(object):
-    def __init__(self,sigma):
-        three_sigma= 3.0*sigma
-        self.sigma=sigma
-        x = np.arange(-three_sigma,three_sigma, 0.1)
-        y = np.arange(-three_sigma,three_sigma, 0.1)
+    def __init__(self, sigma):
+        three_sigma = 3.0 * sigma
+        self.sigma = sigma
+        self.x = np.arange(-three_sigma, three_sigma+0.1, 0.1)
+        self.y = np.arange(-three_sigma, three_sigma+0.1, 0.1)
+
+        self.X, self.Y = np.meshgrid(self.x, self.y)
 
 
-        self.X, self.Y= np.meshgrid(x, y )
-
-
-    def __call__(self):
-
+    def get_LoG(self):
         sigma_square = self.sigma ** 2
         LoGcontant = 1.0 / (2.0 * pi * (sigma_square ** 2))
         R_square = self.X ** 2 + self.Y ** 2
 
-        exponetnta=np.exp(-R_square /(2 * sigma_square))
-        LoG = LoGcontant * (R_square / sigma_square - 2) * exponetnta
-        LoG_normalized = LoG/np.sum(LoG)
+        exponenta = np.exp(-R_square / (2 * sigma_square))
+        LoG = LoGcontant * (R_square / sigma_square - 2) * exponenta
+        LoG_normalized = LoG / np.sum(LoG)
         print np.sum(LoG_normalized)
         return LoG_normalized
+
+    def get_grid_x_y(self):
+        return self.x ,self.y
