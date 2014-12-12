@@ -1,11 +1,13 @@
-#from scipy import ndimage
+# from scipy import ndimage
+from tempfile import TemporaryFile
+from SizeKernel import SizeKernel3D
 
 __author__ = 'Agnieszka'
 import numpy as np
-from scipy.ndimage import  convolve
+from scipy.ndimage import convolve
 
 
-class GaussianConvolution(object):
+class LoGConvolution(object):
     '''
     Gaussian convolution for one 3D image as np.array
     '''
@@ -22,16 +24,22 @@ class GaussianConvolution(object):
         self.mask_size = mask_size
         self.sigma_zero = sigma_zero
         self.octave_size = octave_size
-        self.octaveNo = octaveNo
 
-    def apply(self, Image3D,):
-        """
-        :param Image3D: image as 3D np.array
-        :return: DoG=I(sigma_n)-I(sigma_n-1) difference between smoothed images (I)
-        """
-        self.gasussian_kernel=#kernel in 3D with size for sigma and size depend on sigma
-        ImageForRecurention = convolve(Image3D, self.gaussian_kernel, mode='reflect')
 
-        if(sigma>max): return ImageForRecurention, sigma
-        else:
-            self.apply(ImageForRecurention)
+    def apply(self, Image3D_with_spacing):
+        """
+        :param Image3D_with_spacing: object ReadDirWithBinaryData
+        :return: I(sigma_n)=LoG(sigma)*Image
+        """
+
+        size_kernel = SizeKernel3D(Image3D_with_spacing.get_spacing())
+        sigma = self.sigma_zero
+        kernel = size_kernel(self.mask_size, sigma)
+        Image_after_convolution = np.convolve(Image3D_with_spacing.get_image3D(), kernel)
+        sigmas=[self.sigma_zero]
+        size=0
+        for sigma in sigmas:
+            kernel = size_kernel(self.mask_size, sigma)
+            Image_after_convolution = np.convolve(Image_after_convolution, kernel)
+            outfile = file(Image3D_with_spacing.my_path+'_'+str(sigma))
+            np.savez(outfile,Image_after_convolution)

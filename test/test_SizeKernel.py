@@ -4,7 +4,7 @@ from numpy import max, linspace, min, meshgrid, array_equal
 
 __author__ = 'Agnieszka'
 import unittest
-from SizeKernel import SizeKernel2D
+from SizeKernel import SizeKernel2D, SizeKernel3D
 from readDicom import ReadDirWithBinaryData
 
 
@@ -14,11 +14,10 @@ class SizeKernel2DTest(unittest.TestCase):
 
         self.size_kernel = SizeKernel2D(spacing)
         self.mask_size = 40.
-        self.sigma = 100.
+        self.sigma = 6.
         self.kernel = self.size_kernel(self.mask_size, self.sigma)
-    def test_ploting(self):
 
-
+    def test_plotting(self):
         xx = linspace(min(self.size_kernel.x), max(self.size_kernel.x), self.kernel.shape[0])
         yy = linspace(min(self.size_kernel.y), max(self.size_kernel.y), self.kernel.shape[1])
         grid_x, grid_y = meshgrid(xx, yy)
@@ -30,9 +29,29 @@ class SizeKernel2DTest(unittest.TestCase):
         show()
 
     def test_kernel_values(self):
+
         self.assertEqual(True, array_equal(self.kernel[:, 0], self.kernel[:, -1]))
-        self.assertEqual(True, array_equal(self.kernel[0, :], self.kernel[-1:0]))
+        self.assertEqual(True, array_equal(self.kernel[0, :], self.kernel[-1, :]))
 
     def test_kernel_size(self):
-        self.assertEqual(self.kernel.shape,(41L,41L))
+        self.assertEqual(self.kernel.shape, (41L, 41L))
+
+
+class SizeKernel3DTest(unittest.TestCase):
+    def setUp(self):
+        spacing = ReadDirWithBinaryData('./test_data/1_nd/').get_spacing()
+
+        self.size_kernel = SizeKernel3D(spacing)
+        self.mask_size = 40.
+        self.sigma = 10.
+        self.kernel = self.size_kernel(self.mask_size, self.sigma)
+
+
+    def test_kernel_values(self):
+        self.assertEqual(True, array_equal(self.kernel[:, :, 0], self.kernel[:, :, -1]))
+        self.assertEqual(True, array_equal(self.kernel[0, :, :], self.kernel[-1, :, :]))
+        self.assertEqual(True, array_equal(self.kernel[:, 0, :], self.kernel[:, -1, :]))
+
+    def test_kernel_size(self):
+        self.assertEqual(self.kernel.shape, (41L, 41L,9L))
 

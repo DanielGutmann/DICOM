@@ -30,14 +30,14 @@ class ReadDirWithDicom(object):
 class ReadDirWithBinaryData(object):
 
     def __init__(self, path):
-        my_path = path
-        self.mata_bin = open(my_path+'hdr_CT.bin.txt')
+        self.my_path = path
+        self.mata_bin = open(self.my_path+'hdr_CT.bin.txt')
         self.width = int(self.mata_bin.readline().split(' = ')[1][:-2])
         self.hight = int(self.mata_bin.readline().split(' = ')[1][:-2])
         self.depth = int(self.mata_bin.readline().split(' = ')[1][:-2])
         self.data_type = self.mata_bin.readline().split(' = ')[1][:-2]
-        self.Image3D = np.reshape(np.fromfile(my_path+'CT.bin',dtype= np.float32),(self.width,self.hight,self.depth))
-        self.spaceing = np.fromfile(my_path+'spacing.txt',dtype= self.data_type, sep="    ")
+        self.Image3D = np.reshape(np.fromfile(self.my_path+'CT.bin',dtype= np.float32),(self.width,self.hight,self.depth))
+        self.spaceing = np.fromfile(self.my_path+'spacing.txt',dtype= self.data_type, sep="    ")
         print('Reading data done')
 
     def get_image3D(self):
