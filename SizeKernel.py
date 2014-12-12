@@ -1,8 +1,7 @@
 from math import ceil
-from matplotlib import cm
-from matplotlib.pyplot import figure, show
-from scipy.interpolate import interpn, griddata
+from scipy.interpolate import interpn
 import numpy as np
+
 
 __author__ = 'Agnieszka'
 from LoGKernel import LoG2D, LoG3D
@@ -101,5 +100,5 @@ class SizeKernel3D(object):
         interpolate_grid = np.array(list_end)
 
         kernel = interpn((self.x, self.y, self.z), LoG_kernel, interpolate_grid)
-       
+
         return kernel
