@@ -15,18 +15,14 @@ class LoG3DFilterTest(unittest.TestCase):
         self.image = ReadDirWithBinaryData('./test_data/1_nd/')
 
     def test_apply(self):
-
         self.LoG3DConvolution.apply(self.image)
-        #fast_convolution = jit(double[:, :, :](double[:, :, :],
-                     #   double[:, :, :]))(self.LoG3DConvolution.apply)
-        #fast_convolution(self.image)
 
 
 class LoG2DFilterTest(unittest.TestCase):
     def setUp(self):
-        mask_size = 40.0
+        mask_size = 100.0
         sigma_zero = 1.6
-        octave_size = 4
+        octave_size = 5
         self.LoG2DConvolution = LoGConvolution2D(mask_size, sigma_zero, octave_size)
         self.image = ReadDirWithBinaryData('./test_data/1_nd/')
 

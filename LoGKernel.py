@@ -50,9 +50,9 @@ class LoG2D(object):
 
         exponenta = np.exp(-R_square / (2 * sigma_square))
         LoG = LoGcontant * (R_square / sigma_square - 2) * exponenta
-        LoG_normalized = LoG / np.sum(LoG)
-        print np.sum(LoG_normalized)
-        return LoG_normalized
+        #LoG_normalized = LoG / np.sum(LoG)
+        #print np.sum(LoG_normalized)
+        return LoG
 
     def get_grid_x_y(self):
         return self.x, self.x

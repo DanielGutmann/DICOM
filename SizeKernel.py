@@ -44,7 +44,7 @@ class SizeKernel2D(object):
         for i in index_value:
             list_for_grid_temp.append(np.array([self.x[index_value], self.x[i * one]]).T)
         interpolate_grid = np.array(list_for_grid_temp)
-        print(interpolate_grid[1], interpolate_grid[1].shape)
+
 
         #interpolation
         kernel = interpn((self.x, self.y), LoG_kernel, interpolate_grid)

@@ -9,7 +9,6 @@ import numpy as np
 from scipy.ndimage import convolve
 
 
-
 class LoGConvolution2D(object):
     """
     Gaussian convolution for one 3D image as np.array
@@ -37,22 +36,31 @@ class LoGConvolution2D(object):
         print('object creation')
         size_kernel = SizeKernel2D(image2D_with_spacing.get_spacing())
 
-        image_after_convolution = image2D_with_spacing.get_image3D()[:,:,1]
-        sigmas = [self.sigma_zero]
+        image_after_convolution= image2D_with_spacing.get_image3D()[:, :, 1]
+        sig = np.linspace(self.sigma_zero, self.sigma_zero * 2, self.octave_size)
+        #print(sig)
+
+        #temp = np.sqrt(sig[1:] ** 2 - sig[:-1] ** 2)
+        #sig[1:] = temp
+        #print(sig)
         print('object creation end')
-        for sigma in sigmas:
+        for sigma in sig:
             print('kernel creation')
             kernel = size_kernel(self.mask_size, sigma)
             print('object creation end')
             print 'convolution start'
-            image_after_convolution = convolve(image_after_convolution, kernel)
+            image_after_convolution = convolve(image_after_convolution, kernel)/np.sum(kernel)
             print('convolution end')
-            outfile = file(image2D_with_spacing.my_path + '2D_' + str(sigma),'a+')
-            print('file is saving')
-            np.savez(outfile, image_after_convolution)
-            outfile.flush()
-            outfile.close()
+            try:
+                outfile = file(image2D_with_spacing.my_path + 'npy_arrays/2D_' + str(sigma)+'.npy', 'wb')
+                print('file is saving')
+                np.save(outfile, image_after_convolution)
+            finally:
+                outfile.flush()
+                outfile.close()
+
             print('file saved')
+
 
 class LoGConvolution3D(object):
     """
@@ -82,11 +90,11 @@ class LoGConvolution3D(object):
         size_kernel = SizeKernel3D(image3D_with_spacing.get_spacing())
 
         image_after_convolution = image3D_with_spacing.get_image3D()
-        sig = np.linspace(self.sigma_zero,self.sigma_zero*2,self.octave_size)
+        sig = np.linspace(self.sigma_zero, self.sigma_zero * 2, self.octave_size)
+        print(sig)
 
-        print sig
-        temp=np.sqrt(sig[1:]**2-sig[:-1]**2)
-        sig[1:]=temp
+        temp = np.sqrt(sig[1:] ** 2 - sig[:-1] ** 2)
+        sig[1:] = temp
 
         print('object creation end')
 
@@ -97,9 +105,12 @@ class LoGConvolution3D(object):
             print 'convolution start'
             image_after_convolution = convolve(image_after_convolution, kernel)
             print('convolution end')
-            outfile = open(image3D_with_spacing.my_path + '3D_' + str(sigma),'a+')
-            print('file is saving')
-            np.savez(outfile, image_after_convolution)
-            outfile.flush()
-            outfile.close()
+            try:
+                outfile = file(image3D_with_spacing.my_path + 'npy_arrays/3D_' + str(sigma) + '.npy', 'a+')
+                print('file is saving')
+                print np.dtype(image_after_convolution)
+                np.save(outfile, image_after_convolution)
+            finally:
+                outfile.flush()
+                outfile.close()
             print('file saved')
