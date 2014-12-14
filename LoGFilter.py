@@ -51,13 +51,13 @@ class LoGConvolution2D(object):
             print 'convolution start'
             image_after_convolution = convolve(image_after_convolution, kernel)/np.sum(kernel)
             print('convolution end')
-            try:
-                outfile = file(image2D_with_spacing.my_path + 'npy_arrays/2D_' + str(sigma)+'.npy', 'wb')
-                print('file is saving')
-                np.save(outfile, image_after_convolution)
-            finally:
-                outfile.flush()
-                outfile.close()
+
+            outfile = file(image2D_with_spacing.my_path + 'npy_arrays/2D_' + str(sigma)+'.npy', 'wb')
+            print('file is saving')
+            np.save(outfile, image_after_convolution)
+
+            outfile.flush()
+            outfile.close()
 
             print('file saved')
 
@@ -93,8 +93,8 @@ class LoGConvolution3D(object):
         sig = np.linspace(self.sigma_zero, self.sigma_zero * 2, self.octave_size)
         print(sig)
 
-        temp = np.sqrt(sig[1:] ** 2 - sig[:-1] ** 2)
-        sig[1:] = temp
+        #temp = np.sqrt(sig[1:] ** 2 - sig[:-1] ** 2)
+        #sig[1:] = temp
 
         print('object creation end')
 
@@ -105,12 +105,12 @@ class LoGConvolution3D(object):
             print 'convolution start'
             image_after_convolution = convolve(image_after_convolution, kernel)
             print('convolution end')
-            try:
-                outfile = file(image3D_with_spacing.my_path + 'npy_arrays/3D_' + str(sigma) + '.npy', 'a+')
-                print('file is saving')
-                print np.dtype(image_after_convolution)
-                np.save(outfile, image_after_convolution)
-            finally:
-                outfile.flush()
-                outfile.close()
+
+
+            outfile = file(image3D_with_spacing.my_path + 'npy_arrays_3d/3D_' + str(sigma) + '.npy', 'wb')
+            print('file is saving')
+
+            np.save(outfile, image_after_convolution)
+            outfile.flush()
+            outfile.close()
             print('file saved')

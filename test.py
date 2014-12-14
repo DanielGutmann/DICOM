@@ -1,32 +1,35 @@
-import math
+import numpy as np
+from scipy.signal import argrelextrema
 
-Dab = math.pow(10, -10)
+from multiprocessing import Process, Array
 
-td1 = 0.25
-td2 = 0.0025
-td3 = 0.000025
+def f(list,a):
+    lista=list
+    for i in range(len(a)):
+        for j in range(len(a)):
+            for z in range(len(a)):
+                a[i,j,z] = -a[i]
 
-lstr = input("Podaj czas: ")
-czas = float(lstr)
+if __name__ == '__main__':
 
-x1 = czas / td1
-x2 = czas / td2
-x3 = czas / td3
-print(x1, x2, x3)
-suma1 = 0
-suma2 = 0
-suma3 = 0
+    arr = Array('i', range((10,10,3)))
 
-for i in range(1, 50):
-    suma1 = suma1 + ( 1. / math.pow(i, 2)) * math.exp(-math.pow(i * math.pi, 2) * x1)
-    suma2 = suma2 + (1. / math.pow(i, 2)) * math.exp(-math.pow(i * math.pi, 2) * x2)
-    suma3 = suma3 + (1. / math.pow(i, 2)) * math.exp(-math.pow(i * math.pi, 2) * x3)
-    print (-math.pow(i * math.pi, 2) * x1)
+    p = Process(target=f, args=(arr))
+    p.start()
+    p.join()
 
 
-print(suma2, suma1, suma3)
-wynik1 = 1 - (6 / (math.pow(math.pi, 2) * suma1))
-wynik2 = 1 - (6 / (math.pow(math.pi, 2) * suma2))
-wynik3 = 1 - (6 / (math.pow(math.pi, 2) * suma3))
+    print arr[:]
 
-print wynik1, wynik2, wynik3
+from joblib import Parallel, delayed
+import multiprocessing
+
+# what are your inputs, and what operation do you want to
+# perform on each input. For example...
+inputs = range(10)
+def processInput(i):
+    return i * i
+
+num_cores = multiprocessing.cpu_count()
+
+results = Parallel(n_jobs=num_cores)(delayed(processInput)(i) for i in inputs)
