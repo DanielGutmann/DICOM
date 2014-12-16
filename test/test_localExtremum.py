@@ -1,6 +1,5 @@
-from numpy import array_equal
 from localExtermum import LocalExterma3D
-from readNumpyImage import ReadNumpyImages
+
 
 __author__ = 'Agnieszka'
 
@@ -9,16 +8,13 @@ import unittest
 
 class LocalExtrema3DTest(unittest.TestCase):
     def setUp(self):
-        path = './test_data/1_nd/npy_arrays'
-        self.ReadImage = ReadNumpyImages(path)
-        self.list_of_image = self.ReadImage.open()
-        self.local_extrema = LocalExterma3D()
-        self.image3D_after_log = self.local_extrema.find(self.list_of_image[0])
+        path = './test_data/1_nd/npy_arrays_3DDoG'
 
-    def test_true_array(self):
-        #self.assertEqual(True, array_equal(self.local_extrema.false_array
-        print self.local_extrema.true_array
+        self.local_extrema = LocalExterma3D(path)
 
-    def test_get_min_max(self):
-        min, max = self.local_extrema.get_min_max()
+    def test_find(self):
+        self.image3D_after_log = self.local_extrema.find()
 
+
+if __name__ == '__main__':
+    unittest.main()

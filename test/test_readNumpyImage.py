@@ -1,5 +1,5 @@
 from matplotlib.pyplot import imshow, show
-from readNumpyImage import ReadNumpyImages
+from readNumpyImage import ReadNumpy
 
 __author__ = 'Agnieszka'
 
@@ -8,15 +8,22 @@ import unittest
 
 class ReadNumpyImagesTest(unittest.TestCase):
     def setUp(self):
-        path = './test_data/1_nd/npy_arrays'
-        self.ReadImage = ReadNumpyImages(path)
-        self.list_of_image = self.ReadImage.open()
+        path = './test_data/1_nd/npy_arrays_2DGaussianFiltering'
+        self.ReadImage = ReadNumpy(path)
+        self.list_of_image = self.ReadImage.openImage()
     def test_open(self):
+        self.assertEqual(len(self.list_of_image),5)
 
-        self.assertEqual(len(self.list_of_image),3)
     def test_open_RiseExepction(self):
         try:
-            ReadNumpyImages('./test_data/1_nd/').open()
+            ReadNumpy('./test_data/1_nd/').openImage()
+        except IOError:
+            pass
+        else:
+            self.fail('Did not see StopIteration')
+    def test_open_RiseExepction(self):
+        try:
+            ReadNumpy('./test_data/1_nddkndnkvvndkvd/').openImage()
         except IOError:
             pass
         else:
