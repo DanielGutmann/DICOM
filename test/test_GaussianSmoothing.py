@@ -10,7 +10,7 @@ import unittest
 class Gauss3DTest(unittest.TestCase):
     def setUp(self):
         path = './test_data/1_nd/'
-        octaves = 5
+        octaves = 6
         self.gauss = GaussianSmoothing3D(path, octaves)
 
     def test_soothing(self):
@@ -24,7 +24,7 @@ class Gauss3DTest(unittest.TestCase):
 class Gauss2DTest(unittest.TestCase):
     def setUp(self):
         self.path = './test_data/1_nd/'
-        octaves = 5
+        octaves = 6
         self.gauss = GaussianSmoothing2D(self.path, octaves)
 
     def test_soothing(self):

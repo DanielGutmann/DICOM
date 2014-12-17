@@ -33,6 +33,6 @@ class DoG(object):
     def apply(self):
         list_of_image = self.ReadImage.openImage()
         saving = SavingImageAsNumpy(self.path+self.path_to_save)
-        for i in range(0, len(list_of_image)-1):
+        for i in range(0, len(list_of_image)):
             DoG = list_of_image[i + 1] - list_of_image[i]
             saving.saveImage(DoG,i)

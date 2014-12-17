@@ -18,7 +18,7 @@ class GaussianSmoothing2D(object):
 
         """
         self.path = path
-        self.octave_size = octave_size + (octave_size - 1) % 2
+        self.octave_size = octave_size + octave_size % 2
         self.k = sqrt(2)
         self.image = ReadDirWithBinaryData(self.path)
         self.spacing = self.image.get_spacing()

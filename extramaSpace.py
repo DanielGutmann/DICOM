@@ -13,7 +13,6 @@ class ExtremaSpace3D(object):
         Find local extrema without edges in LoG space
         """
         self.path = path
-        self.true_array = np.ones((3, 3, 3), dtype=np.bool)
         self.min_list = []
         self.max_list = []
 
@@ -46,12 +45,13 @@ class ExtremaSpace3D(object):
                 j = min_idx[1]
                 z = min_idx[2]
 
-                bool_array0 = list_with_three_images_3D[1][i, j, z] < list_with_three_images_3D[0][i - 1:i + 2,
+                bool_array0 = list_with_three_images_3D[1][i, j, z] > list_with_three_images_3D[0][i - 1:i + 2,
                                                                       j - 1:j + 2, z - 1:z + 2]
-                bool_array1 = list_with_three_images_3D[1][i, j, z] < list_with_three_images_3D[2][i - 1:i + 2,
+                bool_array1 = list_with_three_images_3D[1][i, j, z] > list_with_three_images_3D[2][i - 1:i + 2,
                                                                       j - 1:j + 2, z - 1:z + 2]
+                sum0 = np.sum(bool_array0) + np.sum(bool_array0)
 
-                if np.array_equal(bool_array1, bool_array0) and np.array_equal(bool_array0, self.true_array):
+                if sum0 == 0:
                     self.min_list.append(min_idx)
 
             for max_idx in max_index:
@@ -60,13 +60,13 @@ class ExtremaSpace3D(object):
                 j = max_idx[1]
                 z = max_idx[2]
                 # first image in LoG space comparison
-                bool_array0 = list_with_three_images_3D[1][i, j, z] > list_with_three_images_3D[0][i - 1:i + 2,
+                bool_array0 = list_with_three_images_3D[1][i, j, z] < list_with_three_images_3D[0][i - 1:i + 2,
                                                                       j - 1:j + 2, z - 1:z + 2]
                 # third image in LoG space comparison
-                bool_array1 = list_with_three_images_3D[1][i, j, z] > list_with_three_images_3D[2][i - 1:i + 2,
+                bool_array1 = list_with_three_images_3D[1][i, j, z] < list_with_three_images_3D[2][i - 1:i + 2,
                                                                       j - 1:j + 2, z - 1:z + 2]
-
-                if np.array_equal(bool_array1, bool_array0) and np.array_equal(bool_array0, self.true_array):
+                sum0 = np.sum(bool_array0) + np.sum(bool_array0)
+                if sum0 == 0:
                     self.max_list.append(max_idx)
 
             min3D, max3D = self.get_min_max()
