@@ -31,11 +31,12 @@ class ExtremaSpace3D(object):
         except OSError:
             pass
         saving = SavingImageAsNumpy(self.path + path_to_save)
+        list_with_index = self.ReadIndex.openIndex()
         for i in range(1, len(list_with_images_3D) - 1):
             self.min_list = []
             self.max_list = []
             list_with_three_images_3D = list_with_images_3D[i - 1:i + 2]
-            list_with_index = self.ReadIndex.openIndex()
+
             sigma = self.ReadIndex.sigmas_index[i - 1]
             min_index = list_with_index[i - 1][0]
             max_index = list_with_index[i - 1][1]
