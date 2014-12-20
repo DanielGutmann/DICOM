@@ -1,12 +1,13 @@
-import os
 from time import clock
-from SavingNumpyImage import SavingImageAsNumpy
-from readNumpyImage import ReadNumpy
+
+from ReadImage import ReadImage
+
+from SaveImage import SaveImage
+
 
 __author__ = 'Agnieszka'
 
 import numpy as np
-import multiprocessing as mp
 
 
 class LocalExterma3D(object):
@@ -21,46 +22,44 @@ class LocalExterma3D(object):
         self.min_list = []
         self.max_list = []
         self.path = path
-        self.ReadImage = ReadNumpy(path)
+        self.ReadImage = ReadImage(path)
 
     def find_one(self, image3D):
         """
-        :param image3D: image after convolution LoG
+        :param image3D: DoG Image as Image object
         :return: void
         """
         self.min_list = []
         self.max_list = []
+        image3D = image3D.Image3D
         shape = image3D.shape
         start = clock()
         for i in range(1, shape[0]):
-
             for j in range(1, shape[1]):
                 for z in range(1, shape[2]):
                     bool_array = image3D[i, j, z] > image3D[i - 1:i + 2, j - 1:j + 2, z - 1:z + 2]
                     sum = np.sum(bool_array)
                     if sum == 0:
                         self.max_list.append(np.array([i, j, z]))
+
                     elif sum == 26 and bool_array[1, 1, 1] == False:
                         self.min_list.append(np.array([i, j, z]))
-
-
+        print(len(self.max_list),len(self.min_list))
         end = clock() - start
-
         print end
 
     def find(self):
-
         list_with_images = self.ReadImage.openImage()
-        path_to_save = '/3DLocalExteremum/'
-        try:
-            os.makedirs(self.path + path_to_save)
-        except OSError:
-            pass
-        saving = SavingImageAsNumpy(self.path + path_to_save)
+        path_to_save = '/3DLocalExtremum/'
+        saving = SaveImage(self.path + path_to_save)
         for i in range(0, len(list_with_images)):
             self.find_one(list_with_images[i])
             min3D, max3D = self.get_min_max()
-            saving.saveIndex(min3D, max3D, self.ReadImage.sigmas_images[i])
+
+            print(min3D.shape,max3D.shape)
+            list_with_images[i].keypoints_min = min3D
+            list_with_images[i].keypoints_max = max3D
+            saving.saveImage(list_with_images[i])
             print('image nr' + str(i) + 'done')
 
 

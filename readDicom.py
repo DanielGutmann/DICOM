@@ -1,3 +1,6 @@
+from Image import Image3D
+from SaveImage import SaveImage
+
 __author__ = 'Agnieszka'
 
 from os import walk
@@ -49,7 +52,8 @@ class ReadDirWithBinaryData(object):
             self.Image3D = self.Image3D.byteswap()
         #read spacing
         self.spacing = np.fromfile(self.my_path + 'spacing.txt', dtype=self.data_type, sep="    ")
-
+        self.im_agregation=Image3D(self.Image3D,self.spacing,self.width,self.high,self.depth,0)
+        SaveImage(path+'CT_analyses/').saveImage(self.im_agregation)
         print('Reading data done')
 
     def get_image3D(self):
@@ -63,3 +67,10 @@ class ReadDirWithBinaryData(object):
         :return: return size of pixels in mm x|,y-,z /
         """
         return self.spacing
+    def get_image_aggregation(self):
+        """
+
+        :return:Image aggregation object
+        """
+
+        return self.im_agregation

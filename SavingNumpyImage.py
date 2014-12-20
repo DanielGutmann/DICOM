@@ -7,10 +7,10 @@ class SavingImageAsNumpy(object):
     def __init__(self, path):
         self.path = path
 
-    def saveImage(self, image, sigma):
+    def saveImage(self, image, sigma,spacing):
         outfile = file(self.path + str(sigma) + '.npy', 'wb')
         print('file is saving')
-        savez(outfile, image=image, sigma=sigma)
+        savez(outfile, image=image, sigma=sigma,spacing=spacing)
         outfile.flush()
         outfile.close()
         print('file is saved')

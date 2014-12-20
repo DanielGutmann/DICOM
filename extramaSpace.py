@@ -1,4 +1,6 @@
+from copy import deepcopy
 import os
+from ReadImage import ReadImage
 from SavingNumpyImage import SavingImageAsNumpy
 from localExtermum import LocalExterma3D
 from readNumpyImage import ReadNumpy
@@ -16,7 +18,7 @@ class ExtremaSpace3D(object):
         self.min_list = []
         self.max_list = []
 
-        self.ReadIndex = ReadNumpy(path + '/3DLocalExteremum/')
+        self.ReadImage = ReadImage(path + '/3DLocalExteremum/')
 
 
     def find(self, list_with_images_3D):
@@ -25,32 +27,30 @@ class ExtremaSpace3D(object):
         :param list_with_images_3D: list with three images as np.array after LoG in LoG space direction with increasing sigma
         :return: void
         """
-        path_to_save = 'min_maxSpace3D/'
-        try:
-            os.makedirs(self.path + path_to_save)
-        except OSError:
-            pass
+        path_to_save = 'DoGSpaceExtremum3D/'
+
         saving = SavingImageAsNumpy(self.path + path_to_save)
-        list_with_index = self.ReadIndex.openIndex()
-        for i in range(1, len(list_with_images_3D) - 1):
+        list_with_im = self.ReadImage.openImage()
+        for i in range(1, len(list_with_images_3D)):
             self.min_list = []
             self.max_list = []
             list_with_three_images_3D = list_with_images_3D[i - 1:i + 2]
 
-            sigma = self.ReadIndex.sigmas_index[i - 1]
-            min_index = list_with_index[i - 1][0]
-            max_index = list_with_index[i - 1][1]
+            min_index = list_with_im[i].keyponits_min
+            max_index = list_with_im[i].keyponits_max
 
             for min_idx in min_index:
                 i = min_idx[0]
                 j = min_idx[1]
                 z = min_idx[2]
 
-                bool_array0 = list_with_three_images_3D[1][i, j, z] > list_with_three_images_3D[0][i - 1:i + 2,
-                                                                      j - 1:j + 2, z - 1:z + 2]
-                bool_array1 = list_with_three_images_3D[1][i, j, z] > list_with_three_images_3D[2][i - 1:i + 2,
-                                                                      j - 1:j + 2, z - 1:z + 2]
-                sum0 = np.sum(bool_array0) + np.sum(bool_array0)
+                bool_array0 = list_with_three_images_3D[1].Image3D[i, j, z] > list_with_three_images_3D[0].Image3D[
+                                                                              i - 1:i + 2,
+                                                                              j - 1:j + 2, z - 1:z + 2]
+                bool_array1 = list_with_three_images_3D[1].Image3D[i, j, z] > list_with_three_images_3D[2].Image3D[
+                                                                              i - 1:i + 2,
+                                                                              j - 1:j + 2, z - 1:z + 2]
+                sum0 = np.sum(bool_array0) + np.sum(bool_array1)
 
                 if sum0 == 0:
                     self.min_list.append(min_idx)
@@ -60,18 +60,23 @@ class ExtremaSpace3D(object):
                 i = max_idx[0]
                 j = max_idx[1]
                 z = max_idx[2]
-                # first image in LoG space comparison
-                bool_array0 = list_with_three_images_3D[1][i, j, z] < list_with_three_images_3D[0][i - 1:i + 2,
-                                                                      j - 1:j + 2, z - 1:z + 2]
-                # third image in LoG space comparison
-                bool_array1 = list_with_three_images_3D[1][i, j, z] < list_with_three_images_3D[2][i - 1:i + 2,
-                                                                      j - 1:j + 2, z - 1:z + 2]
-                sum0 = np.sum(bool_array0) + np.sum(bool_array0)
+                # first image in DoG space comparison
+                bool_array0 = list_with_three_images_3D[1].Image3D[i, j, z] < list_with_three_images_3D[0].Image3D[
+                                                                              i - 1:i + 2,
+                                                                              j - 1:j + 2, z - 1:z + 2]
+                # third image in DoG space comparison
+                bool_array1 = list_with_three_images_3D[1].Image3D[i, j, z] < list_with_three_images_3D[2].Image3D[
+                                                                              i - 1:i + 2,
+                                                                              j - 1:j + 2, z - 1:z + 2]
+                sum0 = np.sum(bool_array0) + np.sum(bool_array1)
                 if sum0 == 0:
                     self.max_list.append(max_idx)
 
             min3D, max3D = self.get_min_max()
-            saving.saveIndex(min3D, max3D, sigma)
+            temp_image = deepcopy(list_with_three_images_3D[1])
+            temp_image.keypoints_min = min3D
+            temp_image.keypoints_max = max3D
+            saving.saveImage(temp_image)
 
 
     def get_min_max(self):
