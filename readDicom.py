@@ -29,25 +29,37 @@ class ReadDirWithDicom(object):
 
 class ReadDirWithBinaryData(object):
     def __init__(self, path):
+        """
+        :param path: path to data containing data for one patient
+        :return:void
+        """
         self.my_path = path
-        self.mata_bin = open(self.my_path + 'hdr_CT.bin.txt')
-        self.width = int(self.mata_bin.readline().split(' = ')[1][:-2])
-        self.hight = int(self.mata_bin.readline().split(' = ')[1][:-2])
-        self.depth = int(self.mata_bin.readline().split(' = ')[1][:-2])
-        self.data_type = self.mata_bin.readline().split(' = ')[1][:-2]
+        #read sizing
+        meta_bin = open(self.my_path + 'hdr_CT.bin.txt')
+        self.width = int(meta_bin.readline().split(' = ')[1][:-2])
+        self.high = int(meta_bin.readline().split(' = ')[1][:-2])
+        self.depth = int(meta_bin.readline().split(' = ')[1][:-2])
+        self.data_type = meta_bin.readline().split(' = ')[1][:-2]
+        #read image
         l = open(self.my_path + 'CT.bin', "r")
         f = (np.array(np.fromfile(l, dtype="<f4")))
-
-        self.Image3D = np.reshape(f,
-                                  (self.width, self.hight, 74 ), order='F')
-
+        self.Image3D = np.reshape(f, (self.width, self.high, self.depth), order='F')
+        #hackig for weird binary values
         if np.max(self.Image3D) < 0.1:
             self.Image3D = self.Image3D.byteswap()
-        self.spaceing = np.fromfile(self.my_path + 'spacing.txt', dtype=self.data_type, sep="    ")
+        #read spacing
+        self.spacing = np.fromfile(self.my_path + 'spacing.txt', dtype=self.data_type, sep="    ")
+
         print('Reading data done')
 
     def get_image3D(self):
+        """
+        :return: Image from binary data as np.array with size self.width, self.high, self.depth
+        """
         return self.Image3D
 
     def get_spacing(self):
-        return self.spaceing
+        """
+        :return: return size of pixels in mm x|,y-,z /
+        """
+        return self.spacing

@@ -1,10 +1,11 @@
 from matplotlib.pyplot import imshow, show
+from Vizualization import visualization3D, visualization2D
 
 __author__ = 'Agnieszka'
 
 import unittest
 from readDicom import ReadDirWithBinaryData
-from numpy import array, array_equal
+from numpy import array, array_equal, max, min
 
 
 class readDicomTest(unittest.TestCase):
@@ -26,10 +27,17 @@ class readDicomTest(unittest.TestCase):
         else:
             self.fail('Did not see StopIteration')
 
-    def test_showImage(self):
-        Z=self.Dicoms.get_image3D()[:, :, 3]
-        imshow(Z,cmap='gray')
-        show()
+    def test_values(self):
+        self.assertEqual(max(self.Dicoms.get_image3D()), 2639)
+        self.assertEqual(min(self.Dicoms.get_image3D()), 0)
+
+    def test_showImage2D(self):
+
+        Z = self.Dicoms.get_image3D()[:, :, 3]
+        visualization2D(Z)
+
+    def test_showImage3D(self):
+        visualization3D(self.Dicoms)
 
 
 if __name__ == '__main__':
