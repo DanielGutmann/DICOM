@@ -1,6 +1,7 @@
 from copy import deepcopy
 import os
 from ReadImage import ReadImage
+from SaveImage import SaveImage
 from SavingNumpyImage import SavingImageAsNumpy
 from localExtermum import LocalExterma3D
 from readNumpyImage import ReadNumpy
@@ -18,26 +19,27 @@ class ExtremaSpace3D(object):
         self.min_list = []
         self.max_list = []
 
-        self.ReadImage = ReadImage(path + '/3DLocalExteremum/')
+        self.ReadImage = ReadImage(path)
 
 
-    def find(self, list_with_images_3D):
+    def find(self):
         """
 
         :param list_with_images_3D: list with three images as np.array after LoG in LoG space direction with increasing sigma
         :return: void
         """
         path_to_save = 'DoGSpaceExtremum3D/'
+        print(self.path[:-16] + path_to_save)
+        saving = SaveImage(self.path[:-16] + path_to_save)
 
-        saving = SavingImageAsNumpy(self.path + path_to_save)
         list_with_im = self.ReadImage.openImage()
-        for i in range(1, len(list_with_images_3D)):
+        for i in range(1, len(list_with_im)-1):
             self.min_list = []
             self.max_list = []
-            list_with_three_images_3D = list_with_images_3D[i - 1:i + 2]
+            list_with_three_images_3D = list_with_im[i - 1:i + 2]
 
-            min_index = list_with_im[i].keyponits_min
-            max_index = list_with_im[i].keyponits_max
+            min_index = list_with_im[i].keypoints_min
+            max_index = list_with_im[i].keypoints_max
 
             for min_idx in min_index:
                 i = min_idx[0]
@@ -50,9 +52,11 @@ class ExtremaSpace3D(object):
                 bool_array1 = list_with_three_images_3D[1].Image3D[i, j, z] > list_with_three_images_3D[2].Image3D[
                                                                               i - 1:i + 2,
                                                                               j - 1:j + 2, z - 1:z + 2]
+
                 sum0 = np.sum(bool_array0) + np.sum(bool_array1)
 
                 if sum0 == 0:
+                    print ('min added')
                     self.min_list.append(min_idx)
 
             for max_idx in max_index:
@@ -73,6 +77,7 @@ class ExtremaSpace3D(object):
                     self.max_list.append(max_idx)
 
             min3D, max3D = self.get_min_max()
+            print(min3D.shape,max3D.shape)
             temp_image = deepcopy(list_with_three_images_3D[1])
             temp_image.keypoints_min = min3D
             temp_image.keypoints_max = max3D

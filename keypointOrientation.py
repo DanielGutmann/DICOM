@@ -6,7 +6,8 @@ import numpy as np
 
 
 class KeyPointOrientation(object):
-    def __init__(self, spacing, sigma):
+    def __init__(self, path):
+
         sigma = 1.1
         self.spacing = spacing
         size_in_pixels = ceil(sigma * 1.5)
@@ -24,7 +25,7 @@ class KeyPointOrientation(object):
         self.gaussian_weight = np.exp(-(self.X ** 2 + Y ** 2 + Z ** 2) / (2 * sigma ** 2))
 
 
-    def keypoints_histograms(self, keypoints, image3d_smoothed):
+    def keypoints_histograms(self, ):
 
         delta_azimuth = np.pi/2.
         delta_elevation = np.pi/2

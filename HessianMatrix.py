@@ -1,4 +1,6 @@
 import os
+from ReadImage import ReadImage
+from SaveImage import SaveImage
 from SavingNumpyImage import SavingImageAsNumpy
 from readNumpyImage import ReadNumpy
 
@@ -8,14 +10,17 @@ import numpy as np
 
 
 class HessianMatrix(object):
-    def __init__(self, threshold, spacing):
+    def __init__(self, threshold):
         self.threshold = threshold
         self.threshold_sqr = threshold ** 2
         self.keypoints_list = []
-        self.spacing = spacing
+        self.spacing = 0
 
-    def HessianValues(self, Image3D, keypoints):
+
+    def HessianValues(self, image, keypoints):
         self.keypoints_list = []
+        Image3D = image.Image3D
+        self.spacing = image.spacing
         img_dx = np.diff(Image3D, axis=0) / self.spacing[0]
         img_dy = np.diff(Image3D, axis=1) / self.spacing[1]
         img_dz = np.diff(Image3D, axis=2) / self.spacing[2]
@@ -54,28 +59,29 @@ class HessianMatrix(object):
 
                 pass
 
-        return self.keypoints_list
+        return self.get_key_points()
 
-    def HessianElimination(self, path, list_with_images):
+    def HessianElimination(self, path):
+        """
+        :param path: path to CT analyses folder
+        :return:void saving images aggregator
+        """
 
         path = path
+        path_to_save = '/Hessian3D/'
 
-        path_to_save = 'Hessian3D/'
-        try:
-            os.makedirs(path + path_to_save)
-        except OSError:
-            pass
-        saving = SavingImageAsNumpy(path + path_to_save)
-        ReadIndex = ReadNumpy(path + '/npy_arrays_3DDoGmin_maxSpace3D/')
-        index = ReadIndex.openIndex()
+        saving = SaveImage(path + path_to_save)
+        ReadIm = ReadImage(path + '/3DDoG/DoDSpaceExtremum3D/')
+        im = ReadIm.openImage()
 
+        for i in range(0, len(im)):
+            if im[i].keypoints_min.shape[0] != 0:
+                im[i].keypoints_min = self.HessianValues(im[i], im[i].keypoints_min)
 
-        sigmas = ReadIndex.sigmas_index
-        for i in range(1, len(list_with_images)-1):
+            if im[i].keypoints_max.shape[0] != 0:
+                im[i].keypoints_max = self.HessianValues(im[i], im[i].keypoints_max)
 
-            min3D = self.HessianValues(list_with_images[i], index[i-1][0])
-            max3D = self.HessianValues(list_with_images[i], index[i-1][1])
-            saving.saveIndex(min3D, max3D, sigmas[i-1])
+            saving.saveImage(im)
 
     def get_key_points(self):
         return np.array(self.keypoints_list)

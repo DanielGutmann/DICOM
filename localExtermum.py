@@ -40,10 +40,10 @@ class LocalExterma3D(object):
                     bool_array = image3D[i, j, z] > image3D[i - 1:i + 2, j - 1:j + 2, z - 1:z + 2]
                     sum = np.sum(bool_array)
                     if sum == 0:
-                        self.max_list.append(np.array([i, j, z]))
+                        self.min_list.append(np.array([i, j, z]))
 
                     elif sum == 26 and bool_array[1, 1, 1] == False:
-                        self.min_list.append(np.array([i, j, z]))
+                        self.max_list.append(np.array([i, j, z]))
         print(len(self.max_list),len(self.min_list))
         end = clock() - start
         print end

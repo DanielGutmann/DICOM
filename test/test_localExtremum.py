@@ -17,7 +17,7 @@ class LocalExtrema3DTest(unittest.TestCase):
         self.image3D_after_log = self.local_extrema.find()
 
     def test_show(self):
-        path = './test_data/1_nd/CT_analyses/3DDoG/3DLocalExteremum/'
+        path = './test_data/1_nd/CT_analyses/3DDoG/3DLocalExtremum/'
         list_with_images = ReadImage(path).openImage()
         for z in list_with_images:
             keypoints_vizualization(z)
