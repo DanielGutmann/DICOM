@@ -98,7 +98,7 @@ class SizeKernel3D(object):
                 list_for_grid_temp.append(np.array([one * self.x[j], one * self.y[i], self.z[index_value_z]]).T)
             list_end.append(list_for_grid_temp)
         interpolate_grid = np.array(list_end)
-
+        print(self.x)
         kernel = interpn((self.x, self.y, self.z), LoG_kernel, interpolate_grid)
 
-        return kernel
+

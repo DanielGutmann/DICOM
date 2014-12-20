@@ -5,11 +5,11 @@ __author__ = 'Agnieszka'
 import numpy as np
 
 
-class KeyPointOrientation(object):
+class KeyPointDiscriptor(object):
     def __init__(self, spacing, sigma):
         sigma = 1.1
         self.spacing = spacing
-        size_in_pixels = ceil(sigma * 1.5)
+        size_in_pixels =
 
         self.size_of_window_x = size_in_pixels  # ceil(size_in_mm / spacing[0])
         self.size_of_window_y = size_in_pixels  # ceil(size_in_mm / spacing[1])

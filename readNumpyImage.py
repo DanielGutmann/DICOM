@@ -22,7 +22,9 @@ class ReadNumpy(object):
             print(f)
             if '.npy' in f:
                 try:
+
                     file_temp = file(f, 'rb')
+
                     temp_file = np.load(file_temp)
 
                     self.ImagesList.append(temp_file['image'])
