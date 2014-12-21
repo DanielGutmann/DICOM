@@ -5,40 +5,24 @@ __author__ = 'Agnieszka'
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-import numpy
+import numdifftools as nd
 from mayavi.mlab import *
 
-def func(x, y):
-    return np.exp(-(x**2+y**2)/2)
-
-grid_x, grid_y = np.mgrid[-1:1:0.1, -1:1:0.1]
-points = np.random.rand(1000, 2)*2-1
-
-
-values = func(points[:,0], points[:,1])
-
-from scipy.interpolate import griddata
-print(points.shape,values.shape,grid_x.shape)
-grid_z0 = griddata(points, values, (grid_x, grid_y), method='nearest')
-grid_z1 = griddata(points, values, (grid_x, grid_y), method='linear')
-grid_z2 = griddata(points, values, (grid_x, grid_y), method='cubic')
-import matplotlib.pyplot as plt
-print(grid_x.shape)
-plt.subplot(221)
-plt.imshow(func(grid_x, grid_y).T, extent=(-1,1,-1,1), origin='lower')
-plt.plot(points[:,0], points[:,1], 'k.', ms=1)
-plt.title('Original')
-plt.subplot(222)
-plt.imshow(grid_z0.T, extent=(-1,1,-1,1), origin='lower')
-plt.title('Nearest')
-plt.subplot(223)
-plt.imshow(grid_z1.T, extent=(-1,1,-1,1), origin='lower')
-plt.title('Linear')
-plt.subplot(224)
-plt.imshow(grid_z2.T, extent=(-1,1,-1,1), origin='lower')
-plt.title('Cubic')
-plt.gcf().set_size_inches(6, 6)
-plt.show()
+x = np.arange(0,60).reshape(5,4,3,order='F')
+print x.shape
+print(x[:,:,1])
+print(x[:,:,2])
+xp= np.diff(x,axis=2)
+x,y,z= np.gradient(x,3,4,1)
+print(xp)
+print('___')
+print(x)
+print('___')
+print(y)
+print('___')
+print(z)
+#print np.diff(y,axis=1)
+#print np.diff(xp,axis=2)
 ''''
 ReadIndex = ReadNumpy('D:/analiza_danych/DICOM/test/test_data/1_nd/Hessian3D/')
 list_with_index = ReadIndex.openIndex()

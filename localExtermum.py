@@ -52,7 +52,9 @@ class LocalExterma3D(object):
         list_with_images = self.ReadImage.openImage()
         path_to_save = '/3DLocalExtremum/'
         saving = SaveImage(self.path + path_to_save)
-        for i in range(0, len(list_with_images)):
+        saving.saveImage(list_with_images[0])
+        saving.saveImage(list_with_images[len(list_with_images)-1])
+        for i in range(1, len(list_with_images)-1):
             self.find_one(list_with_images[i])
             min3D, max3D = self.get_min_max()
 
@@ -61,6 +63,7 @@ class LocalExterma3D(object):
             list_with_images[i].keypoints_max = max3D
             saving.saveImage(list_with_images[i])
             print('image nr' + str(i) + 'done')
+
 
 
     def get_min_max(self):

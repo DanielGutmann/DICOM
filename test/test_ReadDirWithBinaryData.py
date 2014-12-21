@@ -32,6 +32,9 @@ class readDicomTest(unittest.TestCase):
         self.assertEqual(min(self.Dicoms.get_image3D()), 0)
 
     def test_showImage2D(self):
+        print self.Dicoms.get_image3D().shape
+        import numpy as np
+
 
         Z = self.Dicoms.get_image3D()[:, :, 3]
         visualization2D(Z)

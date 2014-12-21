@@ -37,7 +37,7 @@ class ExtremaSpace3D(object):
             self.min_list = []
             self.max_list = []
             list_with_three_images_3D = list_with_im[i - 1:i + 2]
-
+            print(len(list_with_three_images_3D))
             min_index = list_with_im[i].keypoints_min
             max_index = list_with_im[i].keypoints_max
 
@@ -56,7 +56,6 @@ class ExtremaSpace3D(object):
                 sum0 = np.sum(bool_array0) + np.sum(bool_array1)
 
                 if sum0 == 0:
-                    print ('min added')
                     self.min_list.append(min_idx)
 
             for max_idx in max_index:

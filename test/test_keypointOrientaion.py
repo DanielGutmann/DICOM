@@ -8,27 +8,23 @@ from readNumpyImage import ReadNumpy
 
 __author__ = 'Agnieszka'
 import unittest
+import numpy as np
 
 
 class KeyPointOrientationTest(unittest.TestCase):
     def setUp(self):
-        self.path = './test_data/1_nd/'
-        self.Dicoms = ReadDirWithBinaryData(self.path)
-        self.spacing = self.Dicoms.get_spacing()
+        self.path = './test_data/1_nd/CT_analyses'
 
-        self.keypointorientation = KeyPointOrientation(self.spacing, 1)
-        path = './test_data/1_nd/npy_arrays_3DDoG/'
-        self.ReadImage = ReadNumpy(path)
-        self.list_of_image = self.ReadImage.openImage()
-        self.ReadIndex = ReadNumpy('./test_data/1_nd/npy_arrays_3DDoGmin_maxSpace3D/')
-        self.list_index = self.ReadIndex.openIndex()
+        self.keypointorientation = KeyPointOrientation(self.path)
+
+
 
     def test_pixel_diff(self):
-        self.assertEqual(min(self.keypointorientation.pixel_distance_x),
-                         -max(self.keypointorientation.pixel_distance_x))
-        self.assertEqual(min(self.keypointorientation.pixel_distance_z),
-                         -max(self.keypointorientation.pixel_distance_z))
-
+        self.keypointorientation.apply()
+        self.assertEqual(-np.min(self.keypointorientation.X),np.max(self.keypointorientation.X))
+        self.assertEqual(-np.min(self.keypointorientation.Z),np.max(self.keypointorientation.Z))
+        print np.min(self.keypointorientation.X),np.max(self.keypointorientation.Z)
+'''
     def test_vectors(self):
         self.keypointorientation = KeyPointOrientation(self.spacing, 1)
         self.keypointorientation.keypoints_histograms(self.list_index[0][0], self.list_of_image[1])
@@ -42,7 +38,7 @@ class KeyPointOrientationTest(unittest.TestCase):
         print max(w),min(w),pi
         #obj = quiver3d(w,u, v, line_width=3, scale_factor=1)
         #show()
-
+'''
 
 if __name__ == '__main__':
     unittest.main()

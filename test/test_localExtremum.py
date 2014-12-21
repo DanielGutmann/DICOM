@@ -1,5 +1,5 @@
 from ReadImage import ReadImage
-from Vizualization import keypoints_vizualization
+from Vizualization import keypoints_vizualization, visualization3D
 from localExtermum import LocalExterma3D
 
 
@@ -20,7 +20,7 @@ class LocalExtrema3DTest(unittest.TestCase):
         path = './test_data/1_nd/CT_analyses/3DDoG/3DLocalExtremum/'
         list_with_images = ReadImage(path).openImage()
         for z in list_with_images:
-            keypoints_vizualization(z)
+           visualization3D(z)
 
 
 if __name__ == '__main__':

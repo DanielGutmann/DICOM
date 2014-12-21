@@ -41,17 +41,18 @@ def visualization3D(image3D):
 
 
 def keypoints_vizualization(Image3D):
-    print(Image3D.keypoints_max.shape, Image3D.keypoints_min.shape)
-    if Image3D.keypoints_max.shape[0] == 0L:
+    print(Image3D.keypoints_max.shape[0], Image3D.keypoints_min.shape[0])
+    if Image3D.keypoints_max.shape[0] == 0 and Image3D.keypoints_min.shape[0]==0:
+        return
+    elif Image3D.keypoints_max.shape[0] == 0:
         index = Image3D.keypoints_min
 
-    elif Image3D.keypoints_min.shape[0] == 0L:
+    elif Image3D.keypoints_min.shape[0] == 0:
         index = Image3D.keypoints_max
-    elif Image3D.keypoints_max.shape[0] == 0L and Image3D.keypoints_min.shape[0]==0L:
-        return
+
+
     else:
         index = concatenate((Image3D.keypoints_max, Image3D.keypoints_min))
-
-
     points3d(index[:, 0], index[:, 1], index[:, 2], mode='point')
     mlab.show()
+

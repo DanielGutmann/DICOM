@@ -1,4 +1,5 @@
 import os
+from Normalization import normalize
 from ReadImage import ReadImage
 from SaveImage import SaveImage
 from SavingNumpyImage import SavingImageAsNumpy
@@ -28,7 +29,12 @@ class DoG(object):
     def apply(self):
         list_of_image = self.ReadImage.openImage()
         saving = SaveImage(self.path+self.path_to_save)
+        import numpy as np
         for i in range(0, len(list_of_image)-1):
             DoG = list_of_image[i + 1].Image3D - list_of_image[i].Image3D
+            print('before',np.min(DoG) ,np.max(DoG))
+            DoG=normalize(DoG,[-1,1],[0,1])
+
+            print(np.min(DoG) ,np.max(DoG))
             list_of_image[i].Image3D=DoG
             saving.saveImage(list_of_image[i])
