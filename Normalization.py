@@ -1,3 +1,5 @@
+from numpy import concatenate, array
+
 __author__ = 'Agnieszka'
 
 
@@ -9,4 +11,17 @@ def normalize(image, range_of_image, new_range):
     min_o = range_of_image[0]
     im = a + ((im - min_o ) * (b - a)) / (max_o - min_o)
     return im
+
+def keypoints_concatenate(Image3D):
+    if Image3D.keypoints_max.shape[0] == 0 and Image3D.keypoints_min.shape[0]==0:
+        return array([None,None,None])
+    elif Image3D.keypoints_max.shape[0] == 0:
+        index = Image3D.keypoints_min
+
+    elif Image3D.keypoints_min.shape[0] == 0:
+        index = Image3D.keypoints_max
+
+    else:
+        index = concatenate((Image3D.keypoints_max, Image3D.keypoints_min))
+    return index
 

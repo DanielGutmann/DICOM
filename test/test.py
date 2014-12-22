@@ -23,6 +23,11 @@ print('___')
 print(z)
 #print np.diff(y,axis=1)
 #print np.diff(xp,axis=2)
+for i in range(0,10):
+
+    if(i==7):
+        continue
+    print(i)
 ''''
 ReadIndex = ReadNumpy('D:/analiza_danych/DICOM/test/test_data/1_nd/Hessian3D/')
 list_with_index = ReadIndex.openIndex()

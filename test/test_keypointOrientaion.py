@@ -1,6 +1,10 @@
 from math import pi
-from mayavi.tools.helper_functions import quiver3d
-from mayavi.tools.show import show
+
+from matplotlib import cm
+from matplotlib.pyplot import figure
+from matplotlib import cm
+from matplotlib.pyplot import figure, show
+from mpl_toolkits.mplot3d import Axes3D
 from numpy import min, max
 from keypointOrientation import KeyPointOrientation
 from readDicom import ReadDirWithBinaryData
@@ -16,14 +20,18 @@ class KeyPointOrientationTest(unittest.TestCase):
         self.path = './test_data/1_nd/CT_analyses'
 
         self.keypointorientation = KeyPointOrientation(self.path)
-
+        self.keypointorientation.apply()
 
 
     def test_pixel_diff(self):
-        self.keypointorientation.apply()
-        self.assertEqual(-np.min(self.keypointorientation.X),np.max(self.keypointorientation.X))
-        self.assertEqual(-np.min(self.keypointorientation.Z),np.max(self.keypointorientation.Z))
-        print np.min(self.keypointorientation.X),np.max(self.keypointorientation.Z)
+        self.assertEqual(-np.min(self.keypointorientation.X), np.max(self.keypointorientation.X))
+        self.assertEqual(-np.min(self.keypointorientation.Z), np.max(self.keypointorientation.Z))
+        print np.min(self.keypointorientation.X), np.max(self.keypointorientation.Z)
+
+    def test_visualization(self):
+        pass
+
+
 '''
     def test_vectors(self):
         self.keypointorientation = KeyPointOrientation(self.spacing, 1)

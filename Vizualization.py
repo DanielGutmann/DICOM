@@ -2,6 +2,7 @@ from matplotlib.pyplot import imshow, show
 from mayavi import mlab
 from mayavi.tools.helper_functions import points3d
 from numpy import concatenate
+from Normalization import keypoints_concatenate
 
 __author__ = 'Agnieszka'
 
@@ -42,17 +43,7 @@ def visualization3D(image3D):
 
 def keypoints_vizualization(Image3D):
     print(Image3D.keypoints_max.shape[0], Image3D.keypoints_min.shape[0])
-    if Image3D.keypoints_max.shape[0] == 0 and Image3D.keypoints_min.shape[0]==0:
-        return
-    elif Image3D.keypoints_max.shape[0] == 0:
-        index = Image3D.keypoints_min
-
-    elif Image3D.keypoints_min.shape[0] == 0:
-        index = Image3D.keypoints_max
-
-
-    else:
-        index = concatenate((Image3D.keypoints_max, Image3D.keypoints_min))
+    index = keypoints_concatenate(Image3D)
     points3d(index[:, 0], index[:, 1], index[:, 2], mode='point')
     mlab.show()
 
