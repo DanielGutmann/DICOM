@@ -27,7 +27,11 @@ def rotation(matrix_size, azimuth, elevation):
 
 
 class rotateImage():
-    def __init__(self, spacing, azimuth, elevation, size_of_area):
+
+    def __init__(self, Image3D):
+
+
+    def apply(self, spacing, azimuth, elevation, size_of_area):
         azimuth = ((360 - azimuth) * pi) / 180.0
         elevation = ((180-(elevation+90)) * pi) / 180.0
         self.grid, self.pixel = rotation(size_of_area, azimuth, elevation)

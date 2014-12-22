@@ -31,7 +31,7 @@ class ReadImage(object):
                     temp_file = np.load(file_temp)
                     im = Image3D(temp_file['image'], temp_file['spacing'], temp_file['width'], temp_file['high'],
                                  temp_file['depth'], temp_file['sigma'], temp_file['keypoints_min'],
-                                 temp_file['keypoints_max'])
+                                 temp_file['keypoints_max'],temp_file['keypoints_orientation'],temp_file['discriptor'])
                     self.ImagesList.append(im)
 
                 finally:

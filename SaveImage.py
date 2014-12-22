@@ -19,7 +19,8 @@ class SaveImage(object):
         print('file is saving')
         savez(outfile, image=image.Image3D, sigma=image.sigma, spacing=image.spacing, width=image.width,
               high=image.high,
-              depth=image.depth, keypoints_min=image.keypoints_min, keypoints_max=image.keypoints_max)
+              depth=image.depth, keypoints_min=image.keypoints_min, keypoints_max=image.keypoints_max,keypoints_orientation=image.keypoints_orientation,
+              discriptor=image.discriptor)
         outfile.flush()
         outfile.close()
         print('file is saved')

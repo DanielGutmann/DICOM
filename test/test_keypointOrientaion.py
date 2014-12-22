@@ -1,7 +1,7 @@
 from math import pi
 
 from matplotlib import cm
-from matplotlib.pyplot import figure
+from matplotlib.pyplot import figure, imshow, colorbar
 from matplotlib import cm
 from matplotlib.pyplot import figure, show
 from mpl_toolkits.mplot3d import Axes3D
@@ -27,12 +27,19 @@ class KeyPointOrientationTest(unittest.TestCase):
         self.assertEqual(-np.min(self.keypointorientation.X), np.max(self.keypointorientation.X))
         self.assertEqual(-np.min(self.keypointorientation.Z), np.max(self.keypointorientation.Z))
         print np.min(self.keypointorientation.X), np.max(self.keypointorientation.Z)
-
-    def test_visualization(self):
-        pass
-
-
 '''
+    def test_visualization(self):
+        H = self.keypointorientation.H2D
+        fig = figure(figsize=(7, 3))
+        ax = fig.add_subplot(131)
+        ax.set_title('imshow: equidistant')
+        im = imshow(H, interpolation='None', origin='low')
+        colorbar()
+        show()
+    #testy na orientacje
+
+
+
     def test_vectors(self):
         self.keypointorientation = KeyPointOrientation(self.spacing, 1)
         self.keypointorientation.keypoints_histograms(self.list_index[0][0], self.list_of_image[1])

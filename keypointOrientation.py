@@ -1,5 +1,7 @@
 from math import ceil, pi
+import warnings
 from mayavi import mlab
+from Histogram2D import Histogram2D
 from Normalization import keypoints_concatenate, normalize
 from ReadImage import ReadImage
 
@@ -77,8 +79,9 @@ class KeyPointOrientation(object):
 
                                                                                                                                                                      i - self.size_of_window_x:i + self.size_of_window_x + 1,
                                                                                                                                                                      j - self.size_of_window_x:j + self.size_of_window_x + 1,
-                                                                                                                                                                     z - self.size_of_window_z:z + self.size_of_window_z + 1] ** 2)
-
+                                                                                                                                                                    z - self.size_of_window_z:z + self.size_of_window_z + 1] ** 2)
+            #print(np.max(self.magnitude))
+            #self.magnitude= normalize(self.magnitude,[np.min(self.magnitude),np.max(self.magnitude)],[0.0,1])
             self.azimuth = np.arctan2(dy[i - self.size_of_window_x:i + self.size_of_window_x + 1,
                                       j - self.size_of_window_x:j + self.size_of_window_x + 1,
                                       z - self.size_of_window_z:z + self.size_of_window_z + 1], dx[
@@ -88,15 +91,28 @@ class KeyPointOrientation(object):
 
             self.elevation = np.arccos(dz[i - self.size_of_window_x:i + self.size_of_window_x + 1,
                                        j - self.size_of_window_x:j + self.size_of_window_x + 1,
-                                       z - self.size_of_window_z:z + self.size_of_window_z + 1] / self.magnitude)
+                                       z - self.size_of_window_z:z + self.size_of_window_z + 1]) #/self.magnitude)
+            with warnings.catch_warnings(record=True) as w:
+                print self.magnitude
+
+
 
             solid_angle = 1 / (delta_elevation * (np.cos(self.azimuth) - np.cos(self.azimuth + delta_azimuth)))
 
             weights = self.magnitude * self.gaussian_weight * solid_angle
-            self.weights = normalize(weights, [np.max(weights), np.min(weights)], [0, 1])
+            #self.weights = normalize(weights, [np.min(weights), np.max(weights)], [0, 1])
 
 
-        return self.azimuth, self.elevation, self.weights
+            NO_xbin=4
+            NO_ybin=8
+
+            #H2D = Histogram2D(NO_xbin, NO_ybin)
+            #H2D.apply(self.elevation, self.azimuth, weights)
+            #self.H2D = H2D.get_Histogram2D()
+            #angles=H2D.get_Histogram2D_max()
+            #keypoint_listi,j,z,angles
+
+
 
 
 
