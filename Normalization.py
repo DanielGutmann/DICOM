@@ -1,4 +1,4 @@
-from numpy import concatenate, array
+from numpy import concatenate, array, ones
 
 __author__ = 'Agnieszka'
 
@@ -9,7 +9,10 @@ def normalize(image, range_of_image, new_range):
     im = image
     max_o = range_of_image[1]
     min_o = range_of_image[0]
-    im = a + ((im - min_o ) * (b - a)) / (max_o - min_o)
+    if min_o!=max_o:
+        im = a + ((im - min_o ) * (b - a)) / (max_o - min_o)
+    else:
+        return ones((im.shape))*min_o
     return im
 
 def keypoints_concatenate(Image3D):

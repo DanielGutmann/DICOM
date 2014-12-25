@@ -47,3 +47,8 @@ def keypoints_vizualization(Image3D):
     points3d(index[:, 0], index[:, 1], index[:, 2], mode='point')
     mlab.show()
 
+def keypointsOrinetation_vizualization(Image3D):
+    index = Image3D.keypoints_orientation
+    points3d(index[:, 0], index[:, 1], index[:, 2], mode='point')
+    #x=sin()*cos()
+    mlab.show()

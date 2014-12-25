@@ -12,7 +12,7 @@ class Histogram2D(object):
         self.No_bin_x = No_bin_x
         self.No_bin_y = No_bin_y
         self.H = 0
-        self.peaks = []
+
         self.angle = np.pi/4.0
 
     def apply(self, elevation, azimuth, weights):
@@ -22,7 +22,7 @@ class Histogram2D(object):
                                  normed=False, weights=weights.flatten())
         H = normalize(H, [np.min(H), np.max(H)], [-1, 1])
         H = gaussian_filter(H, 0.1, truncate=3.0)
-        self.H = normalize(H, [np.min(H), np.max(H)], [-1, 1])
+        self.H = normalize(H, [np.min(H), np.max(H)], [0, 1])
         peaks = self.H > 0.8
         control_sum = np.sum(peaks)
         index_peaks = np.unravel_index(self.H.argmax(), self.H.shape)
@@ -45,6 +45,7 @@ class Histogram2D(object):
 
 
     def get_Histogram2D_max(self):
+
         return np.array(self.peaks) * self.angle
 
 

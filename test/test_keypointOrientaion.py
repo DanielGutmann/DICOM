@@ -6,6 +6,8 @@ from matplotlib import cm
 from matplotlib.pyplot import figure, show
 from mpl_toolkits.mplot3d import Axes3D
 from numpy import min, max
+from ReadImage import ReadImage
+from Vizualization import keypoints_vizualization, keypointsOrinetation_vizualization
 from keypointOrientation import KeyPointOrientation
 from readDicom import ReadDirWithBinaryData
 from readNumpyImage import ReadNumpy
@@ -27,15 +29,15 @@ class KeyPointOrientationTest(unittest.TestCase):
         self.assertEqual(-np.min(self.keypointorientation.X), np.max(self.keypointorientation.X))
         self.assertEqual(-np.min(self.keypointorientation.Z), np.max(self.keypointorientation.Z))
         print np.min(self.keypointorientation.X), np.max(self.keypointorientation.Z)
-'''
+
     def test_visualization(self):
-        H = self.keypointorientation.H2D
-        fig = figure(figsize=(7, 3))
-        ax = fig.add_subplot(131)
-        ax.set_title('imshow: equidistant')
-        im = imshow(H, interpolation='None', origin='low')
-        colorbar()
-        show()
+      path = './test_data/1_nd/CT_analyses/KeyPointsOrientation/'
+      list_with_images = ReadImage(path).openImage()
+      for z in list_with_images:
+        keypointsOrinetation_vizualization(z)
+
+
+'''
     #testy na orientacje
 
 
