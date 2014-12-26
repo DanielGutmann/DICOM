@@ -16,7 +16,7 @@ def rotation(matrix_size, azimuth, elevation):
     pixel = []
     for i in range(-matrix_size, matrix_size + 1, 1):
         for j in range(-matrix_size, matrix_size + 1, 1):
-            for z in range(-int(matrix_size / 3), int(matrix_size / 3) + 1, 1):
+            for z in range(-int(matrix_size / 2), int(matrix_size / 2) + 1, 1):
                 pixel.append(np.array([i, j, z]))
                 rotated.append(np.dot(np.array([i, j, z]), rotate_m))
     return np.array(rotated), np.array(pixel)
@@ -39,15 +39,18 @@ class rotateImage():
         self.grid[:, 0] = self.grid[:, 0] + 256
         self.grid[:, 1] = self.grid[:, 1] + 256
         self.grid[:, 2] = self.grid[:, 2] + 37
-        #self.grid[:, 0] = self.grid[:, 0] * step_x
-        #self.grid[:, 1] = self.grid[:, 1] * step_y
-        #self.grid[:, 2] = self.grid[:, 2] * step_z
+        self.grid[:, 0] = self.grid[:, 0] * step_x
+        self.grid[:, 1] = self.grid[:, 1] * step_y
+        self.grid[:, 2] = self.grid[:, 2] * step_z
 
 
-        self.x, self.y, self.z = np.mgrid[-8:8, -8:8, -2:2]
+        self.x, self.y, self.z = np.mgrid[-10:10, -10:10, -2:2]
         self.x = self.x + 256
         self.y = self.y + 256
         self.z = self.z + 37
+        self.x = self.x *step_x
+        self.y = self.y *step_y
+        self.z = self.z *step_z
 
         im = self.imageInterp()
         return im
