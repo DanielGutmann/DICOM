@@ -83,7 +83,9 @@ class KeyPointOrientation(object):
             self.magnitude = np.sqrt(temp_x ** 2 + temp_y ** 2 + temp_z ** 2)
             self.azimuth = np.arctan2(temp_y, temp_x) + np.pi
 
-            self.elevation = np.arctan2(np.sqrt(temp_x ** 2 + temp_y ** 2), temp_z) + np.pi
+            self.elevation = np.arctan2(temp_z,np.sqrt(temp_x ** 2 + temp_y ** 2))+np.pi/2
+            if np.min(self.elevation)<-np.pi/2.:
+                print "alalal"
 
             solid_angle = 1 / (delta_elevation * (np.cos(self.azimuth) - np.cos(self.azimuth + delta_azimuth)))
             solid_angle = normalize(solid_angle, [np.min(solid_angle), np.max(solid_angle)], [0, 1])

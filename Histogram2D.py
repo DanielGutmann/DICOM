@@ -1,3 +1,4 @@
+from matplotlib.pyplot import show, colorbar, imshow, figure
 from scipy.ndimage import gaussian_filter
 from Normalization import normalize
 
@@ -31,6 +32,8 @@ class Histogram2D(object):
 
         if control_sum == 1:
             self.peaks.append(index_peaks)
+
+
         elif control_sum == 2:
             self.peaks.append(index_peaks)
 

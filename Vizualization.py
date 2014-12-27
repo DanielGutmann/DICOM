@@ -22,9 +22,11 @@ def visualization3D(image3D):
     :param image3D: image object from readDirWithBinaryDAta
     :return:
     """
+    s=image3D.Image3D
     src = mlab.pipeline.scalar_field(image3D.Image3D)
     src.spacing = image3D.spacing
     src.update_image_data = True
+    '''
     mlab.pipeline.image_plane_widget(src,
                                      plane_orientation='x_axes',
                                      slice_index=128,
@@ -36,6 +38,16 @@ def visualization3D(image3D):
                                      colormap='black-white'
 
     )
+    mlab.pipeline.image_plane_widget(src,
+                                     plane_orientation='y_axes',
+                                     slice_index=128,
+                                     colormap='black-white'
+
+    )
+    '''
+    mlab.pipeline.iso_surface(src, contours=[s.min()+0.1*s.ptp(), ], opacity=0.5)
+    mlab.pipeline.iso_surface(src, contours=[s.max()-0.1*s.ptp(), ],)
+
     mlab.outline()
 
     mlab.show()
