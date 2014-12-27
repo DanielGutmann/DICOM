@@ -49,13 +49,13 @@ class rotateImage():
 
         if (np.array([area_end,area_begin,area_begin_y,area_begin_z,area_end_y,area_end_z])<0).sum()>0:
             raise IndexError
-        Image3D = self.image3D.Image3D#[area_begin:area_end,area_begin_y:area_end_y,area_begin_z:area_end_z]
+        Image3D = self.image3D.Image3D[area_begin:area_end,area_begin_y:area_end_y,area_begin_z:area_end_z]
         print(Image3D.shape)
         transform = rotate_matrix(azimuth, elevation)
-        x = np.array([0, 0, Image3D.shape[1] - 1]).dot(transform)
+        x = np.array([0, 0, Image3D.shape[0] - 1]).dot(transform)
         y = np.array([0, Image3D.shape[1] - 1, 0]).dot(transform)
         z = np.array([Image3D.shape[2] - 1, 0, 0]).dot(transform)
-        spacing = np.array([self.image3D.spacing[2],self.image3D.spacing[1],self.image3D.spacing[0]]).dot(transform)
+        spacing = np.array([self.image3D.spacing[2],self.image3D.spacing[1],self.image3D.spacing[0]]).dot(transform).T
 
         s = (np.abs(x) + np.abs(y) + np.abs(z)+1)
         offset = 0.5 * (np.array(Image3D.shape) - 1) - (0.5 * s).dot(transform)
@@ -63,16 +63,6 @@ class rotateImage():
         # hack nearest zastepuje prolemy na brzegach nie do ominiacia jezeli obrocimy wiekszy obszar i wytniemy z niego srodek unikamy problemu
         dst = affine_transform(Image3D, transform.T, order=2, offset=offset, output_shape=s, mode='nearest',
                                output=np.float32)
-
-
-        #spacing=rotate(spacing,azimuth,axes=(0,1))
-        #spacing=rotate(spacing,azimuth,axes=(1,0))
-
-        print(spacing)
-        middel=(np.array([dst.shape])-1)/2
-        #dst[middel[0]-self.histogra_size:middel[0]+self.histogra_size,
-        #middel[0]-self.histogra_size:middel[0]+self.histogra_size]
-
 
 
         return dst, np.abs(spacing)
