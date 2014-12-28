@@ -5,8 +5,6 @@ from scipy.ndimage import affine_transform, rotate
 
 
 def rotate_matrix(azimuth, elevation):
-
-
     return np.array([[np.cos(azimuth) * np.cos(elevation), -np.sin(azimuth), -np.cos(azimuth) * np.sin(elevation)],
                      [np.sin(azimuth) * np.cos(elevation), np.cos(azimuth), -np.sin(azimuth) * np.sin(elevation)],
                      [np.sin(elevation), 0, np.cos(elevation)]])
@@ -28,7 +26,7 @@ def rotation(matrix_size, azimuth, elevation):
 class rotateImage():
     def __init__(self, Image3D):
         self.image3D = Image3D
-        self.histogra_size=8
+        self.histogra_size = 8
 
     def apply(self):
         list_keypoints = self.image3D.keypoints_orientation
@@ -40,22 +38,22 @@ class rotateImage():
 
 
     def apply_for_keypoint(self, azimuth, elevation, size_of_area, key_point):
-        area_begin=key_point[0]-size_of_area
-        area_end =key_point[0]+size_of_area+1
-        area_begin_y=key_point[1]-size_of_area
-        area_end_y =key_point[1]+size_of_area+1
-        area_begin_z=key_point[2]-np.ceil(size_of_area/(self.image3D.spacing[2]/self.image3D.spacing[1]))
-        area_end_z =key_point[2]+np.ceil(size_of_area/(self.image3D.spacing[2]/self.image3D.spacing[1]))+1
+        area_begin = key_point[0] - size_of_area
+        area_end = key_point[0] + size_of_area + 1
+        area_begin_y = key_point[1] - size_of_area
+        area_end_y = key_point[1] + size_of_area + 1
+        area_begin_z = key_point[2] - np.ceil(size_of_area / (self.image3D.spacing[2] / self.image3D.spacing[1]))
+        area_end_z = key_point[2] + np.ceil(size_of_area / (self.image3D.spacing[2] / self.image3D.spacing[1])) + 1
 
-        if (np.array([area_end,area_begin,area_begin_y,area_begin_z,area_end_y,area_end_z])<0).sum()>0:
-            raise IndexError
-        Image3D = self.image3D.Image3D[area_begin:area_end,area_begin_y:area_end_y,area_begin_z:area_end_z]
+        #if (np.array([area_end, area_begin, area_begin_y, area_begin_z, area_end_y, area_end_z]) < 0).sum() > 0:
+            #raise IndexError
+        Image3D = self.image3D.Image3D#[area_begin:area_end, area_begin_y:area_end_y, area_begin_z:area_end_z]
         print(Image3D.shape)
         transform = rotate_matrix(azimuth, elevation)
-        x = np.array([0, 0, Image3D.shape[0] - 1]).dot(transform)
+        x = np.array([0, 0, Image3D.shape[2] - 1]).dot(transform)
         y = np.array([0, Image3D.shape[1] - 1, 0]).dot(transform)
-        z = np.array([Image3D.shape[2] - 1, 0, 0]).dot(transform)
-        spacing = np.array([self.image3D.spacing[2],self.image3D.spacing[1],self.image3D.spacing[0]]).dot(transform).T
+        z = np.array([Image3D.shape[1] - 1, 0, 0]).dot(transform)
+        spacing = np.array([self.image3D.spacing[1],self.image3D.spacing[1],self.image3D.spacing[0]]).dot(transform)
 
         s = (np.abs(x) + np.abs(y) + np.abs(z)+1)
         offset = 0.5 * (np.array(Image3D.shape) - 1) - (0.5 * s).dot(transform)

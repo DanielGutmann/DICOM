@@ -40,10 +40,12 @@ class matrixHist(object):
         self.weights = normalize(weights, [np.min(weights), np.max(weights)], [0, 1])
         NO_xbin = 4
         NO_ybin = 8
+        tu w forze jako 4 czesci macierzy
 
         H2D = Histogram2D(NO_xbin, NO_ybin)
         H2D.apply(self.elevation, self.azimuth, weights)
         self.H2D = H2D.get_Histogram2D()
+        zwrocic deskryprot dla keypointu dzies zbierac do listy i zapisac jako obraz
 
 
 
