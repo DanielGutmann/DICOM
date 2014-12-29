@@ -61,6 +61,7 @@ class matrixHist(object):
 
         new_mask = interpn((pixel_distance_x, pixel_distance_y, pixel_distance_z ), mask, interpolate_grid,
                            bounds_error=True, fill_value=np.float32(0.0))
+
         return new_mask.T
 
     def apply(self, mask, spacing):
@@ -74,49 +75,49 @@ class matrixHist(object):
         azimuth = np.arctan2(dy, dx) + np.pi
         elevation = np.arctan2(dz, np.sqrt(dx ** 2 + dy ** 2)) + np.pi / 2
         # weights with normalization for equal contribution
-        #solid_angle = 1 / (delta_elevation * (np.cos(azimuth) - np.cos(azimuth + delta_azimuth)))
-        #solid_angle = normalize(solid_angle, [np.min(solid_angle), np.max(solid_angle)], [0, 1])
+        # solid_angle = 1 / (delta_elevation * (np.cos(azimuth) - np.cos(azimuth + delta_azimuth)))
+        # solid_angle = normalize(solid_angle, [np.min(solid_angle), np.max(solid_angle)], [0, 1])
         self.magnitude = normalize(magnitude, [np.min(magnitude), np.max(magnitude)], [0, 1])
         self.gaussian_weight = normalize(self.gaussian_weight, [np.min(self.gaussian_weight),
                                                                 np.max(self.gaussian_weight)], [0, 1])
-        weights = magnitude * self.gaussian_weight #* solid_angle
+        weights = magnitude * self.gaussian_weight  # * solid_angle
         self.weights = normalize(weights, [np.min(weights), np.max(weights)], [0, 1])
         # splitig array mask for 8 equal parts
         div0 = np.array([8, ])
         div1 = np.array([7, ])
         # angles
         h0 = np.hsplit(azimuth, div0)[0]
-        A_1 = np.dsplit(np.vsplit(h0, div0)[0], div0)[0]  # 1
-        A_2 = np.dsplit(np.vsplit(h0, div0)[0], div1)[1]  # 2
-        A_3 = np.dsplit(np.vsplit(h0, div1)[1], div0)[0]  # 3
-        A_4 = np.dsplit(np.vsplit(h0, div1)[1], div1)[1]  #
+        A_1 = np.vsplit(h0, div0)[0]  # 1
+        A_2 = np.vsplit(h0, div0)[0]  # 2
+        A_3 = np.vsplit(h0, div1)[1]  # 3
+        A_4 = np.vsplit(h0, div1)[1]  #
         h1 = np.hsplit(azimuth, div1)[1]
-        A_5 = np.dsplit(np.vsplit(h1, div0)[0], div0)[0]  # 5
-        A_6 = np.dsplit(np.vsplit(h1, div0)[0], div1)[1]  # 6
-        A_7 = np.dsplit(np.vsplit(h1, div1)[1], div0)[0]  # 7
-        A_8 = np.dsplit(np.vsplit(h1, div1)[1], div1)[1]  # 8
+        A_5 = np.vsplit(h1, div0)[0]  # 5
+        A_6 = np.vsplit(h1, div0)[0]  # 6
+        A_7 = np.vsplit(h1, div1)[1]  # 7
+        A_8 = np.vsplit(h1, div1)[1]  # 8
 
         h0 = np.hsplit(elevation, div0)[0]
-        E_1 = np.dsplit(np.vsplit(h0, div0)[0], div0)[0]  # 1
-        E_2 = np.dsplit(np.vsplit(h0, div0)[0], div1)[1]  # 2
-        E_3 = np.dsplit(np.vsplit(h0, div1)[1], div0)[0]  # 3
-        E_4 = np.dsplit(np.vsplit(h0, div1)[1], div1)[1]  #
+        E_1 = np.vsplit(h0, div0)[0]
+        E_2 = np.vsplit(h0, div0)[0]
+        E_3 = np.vsplit(h0, div1)[1]  # 3
+        E_4 = np.vsplit(h0, div1)[1]  #
         h1 = np.hsplit(elevation, div1)[1]
-        E_5 = np.dsplit(np.vsplit(h1, div0)[0], div0)[0]  # 5
-        E_6 = np.dsplit(np.vsplit(h1, div0)[0], div1)[1]  # 6
-        E_7 = np.dsplit(np.vsplit(h1, div1)[1], div0)[0]  # 7
-        E_8 = np.dsplit(np.vsplit(h1, div1)[1], div1)[1]  # 8
+        E_5 = np.vsplit(h1, div0)[0]  # 5
+        E_6 = np.vsplit(h1, div0)[0]  # 6
+        E_7 = np.vsplit(h1, div1)[1]  # 7
+        E_8 = np.vsplit(h1, div1)[1]  # 8
         # weights
         w0 = np.hsplit(self.weights, div0)[0]
-        W_1 = np.dsplit(np.vsplit(h0, div0)[0], div0)[0]  # 1
-        W_2 = np.dsplit(np.vsplit(h0, div0)[0], div1)[1]  # 2
-        W_3 = np.dsplit(np.vsplit(h0, div1)[1], div0)[0]  # 3
-        W_4 = np.dsplit(np.vsplit(h0, div1)[1], div1)[1]  #
+        W_1 = np.vsplit(h0, div0)[0]  # 1
+        W_2 = np.vsplit(h0, div0)[0]  # 2
+        W_3 = np.vsplit(h0, div1)[1]  # 3
+        W_4 = np.vsplit(h0, div1)[1]  #
         w1 = np.hsplit(self.weights, div1)[1]
-        W_5 = np.dsplit(np.vsplit(h1, div0)[0], div0)[0]  # 5
-        W_6 = np.dsplit(np.vsplit(h1, div0)[0], div1)[1]  # 6
-        W_7 = np.dsplit(np.vsplit(h1, div1)[1], div0)[0]  # 7
-        W_8 = np.dsplit(np.vsplit(h1, div1)[1], div1)[1]  # 8
+        W_5 = np.vsplit(h1, div0)[0]  # 5
+        W_6 = np.vsplit(h1, div0)[0]  # 6
+        W_7 = np.vsplit(h1, div1)[1]  # 7
+        W_8 = np.vsplit(h1, div1)[1]  # 8
         # constatn for histogram
         NO_xbin = 4
         NO_ybin = 8

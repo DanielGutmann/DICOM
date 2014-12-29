@@ -13,7 +13,7 @@ import unittest
 class rotateImageTest(unittest.TestCase):
     def setUp(self):
         self.open = ReadImage('./test_data/1_nd/CT_analyses/KeyPointsOrientation/').openImage()
-        self.rotate = rotateImage(self.open[2],10)
+        self.rotate = rotateImage(self.open[2],10,'./test_data/1_nd/CT_analyses/')
 
     def test_apply(self):
         import time
