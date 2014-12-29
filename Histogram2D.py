@@ -19,7 +19,7 @@ class Histogram2D(object):
     def apply(self, elevation, azimuth, weights):
         self.peaks = []
 
-        self.H=self.get_Histogram2D(self,elevation,azimuth,weights)
+        self.H=self.get_Histogram2D(elevation,azimuth,weights)
         peaks = self.H > 0.8
         control_sum = np.sum(peaks)
         index_peaks = np.unravel_index(self.H.argmax(), self.H.shape)

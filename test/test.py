@@ -10,7 +10,8 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import numdifftools as nd
 
-import numpy as np
+
+''''
 m = np.arange(0,27).reshape(3,3,3)
 
 
@@ -43,7 +44,7 @@ plt.axis('off');
 plt.imshow(dst,cmap=cm.gray)
 plt.show()
 
-''''
+
 ReadIndex = ReadNumpy('D:/analiza_danych/DICOM/test/test_data/1_nd/Hessian3D/')
 list_with_index = ReadIndex.openIndex()
 min_index = list_with_index[0][0]

@@ -30,26 +30,18 @@ class rotateImageTest(unittest.TestCase):
 
 
     def test_visualiation(self):
-        im,s= self.rotate.apply_for_keypoint(math.pi*2,math.pi*2,100, numpy.array([255,255,37]))
+        i=3
+        j=0
+        for i in range(1,9,2):
+            #for j in range(0,5):
+                #print(i,j)
+            im,s= self.rotate.apply_for_keypoint(i*math.pi/4.0,j*math.pi/4.0,10, numpy.array([0,0,0]))
 
-        self.open[0].Image3D = im
-        self.open[0].spacing=s
-        visualization3D(self.open[0])
-        for i in range(0,9):
-            for j in range(0,5):
-                print(i,j)
-                im,s= self.rotate.apply_for_keypoint(i*math.pi/4.,j*math.pi/4.,100, numpy.array([255,255,37]))
-                self.open[0].Image3D = im
-                self.open[0].spacing=s
-                visualization3D(self.open[0])
-        self.open[0].Image3D = self.open[0].Image3D[246:266, 246:266, 35:39]
+            self.open[1].Image3D = im
+            self.open[1].spacing=s
 
-        visualization3D(self.open[0])
-        self.open[0].Image3D = im
-        self.open[0].spacing=s
+            visualization3D(self.open[1])
 
-
-        visualization3D(self.open[0])
 
         pass
 

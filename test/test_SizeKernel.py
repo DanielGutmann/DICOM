@@ -23,6 +23,7 @@ class SizeKernel2DTest(unittest.TestCase):
         grid_x, grid_y = meshgrid(xx, yy)
         fig = figure()
         ax = fig.gca(projection='3d')
+        print(self.kernel.shape)
         ax.plot_surface(grid_x, grid_y, self.kernel, rstride=1, cstride=1, cmap=cm.coolwarm,
                         linewidth=0, antialiased=False)
 
