@@ -1,15 +1,19 @@
-from matplotlib.pyplot import show, colorbar, imshow, figure
 from scipy.ndimage import gaussian_filter
-from Normalization import normalize
 
+from Normalization import normalize
 __author__ = 'Agnieszka'
 
 import numpy as np
-from scipy import interpolate
 
 
 class Histogram2D(object):
     def __init__(self, No_bin_x, No_bin_y):
+        '''
+        Histogram of angles occurrence
+        :param No_bin_x: Numbers of bins for  elevation [0,pi]
+        :param No_bin_y: Numbers of bins fo azimuth [0,2pi]
+        :return:
+        '''
         self.No_bin_x = No_bin_x
         self.No_bin_y = No_bin_y
         self.H = 0
@@ -17,6 +21,13 @@ class Histogram2D(object):
         self.angle = np.pi/4.0
 
     def apply(self, elevation, azimuth, weights):
+        '''
+        Getting peaks from histogram
+        :param elevation: array with elevations
+        :param azimuth: array with azimuth
+        :param weights: array with weights
+        :return: void
+        '''
         self.peaks = []
 
         self.H=self.get_Histogram2D(elevation,azimuth,weights)
@@ -44,12 +55,19 @@ class Histogram2D(object):
 
 
     def get_Histogram2D_max(self):
-
+        '''
+        :return:get peaks in radians
+        '''
         return np.array(self.peaks) * self.angle
 
 
     def get_Histogram2D(self,elevation,azimuth,weights):
-
+        '''
+        :param elevation: array with elevations
+        :param azimuth: array with azimuth
+        :param weights: array with weights
+        :return: histogram of occurrence
+        '''
         H, e, z = np.histogram2d(elevation.flatten(), azimuth.flatten(), bins=[self.No_bin_x, self.No_bin_y],
                                  normed=False, weights=weights.flatten())
         H = normalize(H, [np.min(H), np.max(H)], [-1, 1])
