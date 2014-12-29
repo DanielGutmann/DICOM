@@ -16,6 +16,13 @@ def rotate_matrix(azimuth, elevation):
 
 
 def rotation(matrix_size, azimuth, elevation):
+    '''
+    not for using
+    :param matrix_size:X
+    :param azimuth:X
+    :param elevation:X
+    :return:X
+    '''
     rotate_m = rotate_matrix(azimuth, elevation)
     rotated = []
     pixel = []
@@ -29,12 +36,18 @@ def rotation(matrix_size, azimuth, elevation):
 
 
 class rotateImage():
+
+
     def __init__(self, Image3D, size_of_area):
+
+
         self.image3D = Image3D
         self.size_of_area = size_of_area
 
 
     def apply(self):
+        '''
+        '''
         list_keypoints = self.image3D.keypoints_orientation
         for keypoint in list_keypoints:
             azimuth = keypoint[4]
@@ -44,6 +57,7 @@ class rotateImage():
 
 
     def apply_for_keypoint(self, azimuth, elevation, size_of_area, key_point):
+
         key_point = key_point + 20
         area_begin = key_point[0] - size_of_area
         area_end = key_point[0] + size_of_area + 1
