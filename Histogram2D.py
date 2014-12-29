@@ -1,6 +1,8 @@
+from matplotlib.pyplot import figure, imshow, show
 from scipy.ndimage import gaussian_filter
 
 from Normalization import normalize
+
 __author__ = 'Agnieszka'
 
 import numpy as np
@@ -18,7 +20,7 @@ class Histogram2D(object):
         self.No_bin_y = No_bin_y
         self.H = 0
 
-        self.angle = np.pi/4.0
+        self.angle = np.pi / 4.0
 
     def apply(self, elevation, azimuth, weights):
         '''
@@ -30,7 +32,7 @@ class Histogram2D(object):
         '''
         self.peaks = []
 
-        self.H=self.get_Histogram2D(elevation,azimuth,weights)
+        self.H = self.get_Histogram2D(elevation, azimuth, weights)
         peaks = self.H > 0.8
         control_sum = np.sum(peaks)
         index_peaks = np.unravel_index(self.H.argmax(), self.H.shape)
@@ -52,26 +54,27 @@ class Histogram2D(object):
             self.peaks.append(index_peaks_80)
 
 
-
-
     def get_Histogram2D_max(self):
         '''
-        :return:get peaks in radians
+        :return:get peaks in  first is elevation second azimuth
         '''
-        return np.array(self.peaks) * self.angle
+        return np.array(self.peaks)*self.angle
 
 
-    def get_Histogram2D(self,elevation,azimuth,weights):
+    def get_Histogram2D(self, elevation, azimuth, weights, plt=None):
         '''
         :param elevation: array with elevations
         :param azimuth: array with azimuth
         :param weights: array with weights
         :return: histogram of occurrence
         '''
+
+
         H, e, z = np.histogram2d(elevation.flatten(), azimuth.flatten(), bins=[self.No_bin_x, self.No_bin_y],
-                                 normed=False, weights=weights.flatten())
-        H = normalize(H, [np.min(H), np.max(H)], [-1, 1])
+                                     normed=False, weights=weights.flatten(), range=[[0.0, np.pi], [0.0, 2 * np.pi]])
+        H = normalize(H, [np.min(H), np.max(H)], [0., 1.])
+        H = normalize(H, [np.min(H), np.max(H)], [-1., 1.])
         H = gaussian_filter(H, 0.1, truncate=3.0)
-        H = normalize(H, [np.min(H), np.max(H)], [0, 1])
+        H = normalize(H, [np.min(H), np.max(H)], [0., 1.])
         return H
 

@@ -9,8 +9,8 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import numdifftools as nd
-
-
+x=np.zeros((6,8,10))
+print(np.dsplit(x,np.array([5,]))[0].shape)
 ''''
 m = np.arange(0,27).reshape(3,3,3)
 

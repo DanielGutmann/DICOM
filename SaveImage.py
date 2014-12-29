@@ -16,6 +16,7 @@ class SaveImage(object):
     def saveImage(self, image):
 
         outfile = open(self.path + str(image.sigma) + '.ct', 'wb')
+
         print('file is saving')
         savez(outfile, image=image.Image3D, sigma=image.sigma, spacing=image.spacing, width=image.width,
               high=image.high,

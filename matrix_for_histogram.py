@@ -11,14 +11,14 @@ import numpy as np
 
 
 class matrixHist(object):
-    def __init__(self, spacing, mask_shape):
+    def __init__(self, mask_shape):
         '''
         :param spacing: spacing after rotation in mm
         :param mask_shape: shape of mask for histogram default is [15,15,15] in pixel and (16)mm after interpolation
          'for future changing in code structure'
         :return:void
         '''
-        self.spacing = spacing
+        self.spacing = []
         self.mask_shape = mask_shape
         sigma_x = self.mask_shape * 1.5
         # sigma_z = self.mask_shape[2] * 1.5
@@ -36,16 +36,19 @@ class matrixHist(object):
         self.magnitude = []
         self.weights = []
 
-    def interp(self, mask):
+    def interp(self, mask, spacing):
         '''
         :param mask: new mask in space of 7.5 mm around keypoint
+        :param spacing :spacing after interpolation
         :return: mask after interpolation
         '''
+        self.spacing = spacing
         # new grid in mm in range of 15 mm from 0-8 mm, with points on a cross in a ceneter of mask
         new_grid_range_x = np.arange(0, self.mask_shape / 2 + 1, 1)
         new_pixel_distance_x = np.sort(np.concatenate((-new_grid_range_x[1:], new_grid_range_x)))
         # new_pixel_distance_z = np.sort(np.concatenate((-new_grid_range_x[1:], new_grid_range_x)))
         # grid from mask in mm after rotate, spacing under consideration grid is irregular
+
         grid_range_x = np.arange(0, (mask.shape[0] / 2.) * self.spacing[0], self.spacing[0])
         grid_range_y = np.arange(0, (mask.shape[1] / 2.) * self.spacing[1], self.spacing[1])
         grid_range_z = np.arange(0, (mask.shape[2] / 2.) * self.spacing[2], self.spacing[2])
@@ -55,12 +58,13 @@ class matrixHist(object):
 
         x, y, z = np.meshgrid(new_pixel_distance_x, new_pixel_distance_x, new_pixel_distance_x, indexing='ij')
         interpolate_grid = np.array([x[:, :, :], y[:, :, :], z[:, :, :]]).T
+
         new_mask = interpn((pixel_distance_x, pixel_distance_y, pixel_distance_z ), mask, interpolate_grid,
-                           bounds_error=True)
+                           bounds_error=True, fill_value=np.float32(0.0))
         return new_mask.T
 
-    def apply(self, mask):
-        mask = self.interp(mask)
+    def apply(self, mask, spacing):
+        mask = self.interp(mask, spacing)
         # constant for histogram
         delta_azimuth = np.pi / 4.
         delta_elevation = np.pi / 4.
@@ -69,15 +73,15 @@ class matrixHist(object):
         magnitude = np.sqrt(dx ** 2 + dy ** 2 + dz ** 2)
         azimuth = np.arctan2(dy, dx) + np.pi
         elevation = np.arctan2(dz, np.sqrt(dx ** 2 + dy ** 2)) + np.pi / 2
-        #weights with normalization for equal contribution
-        solid_angle = 1 / (delta_elevation * (np.cos(azimuth) - np.cos(azimuth + delta_azimuth)))
-        solid_angle = normalize(solid_angle, [np.min(solid_angle), np.max(solid_angle)], [0, 1])
+        # weights with normalization for equal contribution
+        #solid_angle = 1 / (delta_elevation * (np.cos(azimuth) - np.cos(azimuth + delta_azimuth)))
+        #solid_angle = normalize(solid_angle, [np.min(solid_angle), np.max(solid_angle)], [0, 1])
         self.magnitude = normalize(magnitude, [np.min(magnitude), np.max(magnitude)], [0, 1])
         self.gaussian_weight = normalize(self.gaussian_weight, [np.min(self.gaussian_weight),
                                                                 np.max(self.gaussian_weight)], [0, 1])
-        weights = magnitude * self.gaussian_weight * solid_angle
+        weights = magnitude * self.gaussian_weight #* solid_angle
         self.weights = normalize(weights, [np.min(weights), np.max(weights)], [0, 1])
-        #splitig array mask for 8 equal parts
+        # splitig array mask for 8 equal parts
         div0 = np.array([8, ])
         div1 = np.array([7, ])
         # angles
@@ -113,18 +117,18 @@ class matrixHist(object):
         W_6 = np.dsplit(np.vsplit(h1, div0)[0], div1)[1]  # 6
         W_7 = np.dsplit(np.vsplit(h1, div1)[1], div0)[0]  # 7
         W_8 = np.dsplit(np.vsplit(h1, div1)[1], div1)[1]  # 8
-        #constatn for histogram
+        # constatn for histogram
         NO_xbin = 4
         NO_ybin = 8
 
         H2D = Histogram2D(NO_xbin, NO_ybin)
-        list_of_histograms_for_keypoints = []
+        list_of_histograms_for_keypoint = []
         for i in range(1, 9):
             nr = str(i)
-            list_of_histograms_for_keypoints.append(
+            list_of_histograms_for_keypoint.append(
                 H2D.get_Histogram2D(eval('E_' + nr), eval('A_' + nr), eval('W_' + nr)))
-        #list of histograms for descriptor (8 histograms as 4x8 bins)
-        return np.array(list_of_histograms_for_keypoints)
+        # list of histograms for descriptor (8 histograms as 4x8 bins)
+        return np.array(list_of_histograms_for_keypoint)
 
 
 

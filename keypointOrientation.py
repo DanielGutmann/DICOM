@@ -57,6 +57,11 @@ class KeyPointOrientation(object):
         # do konfigracji
         delta_azimuth = np.pi / 4.
         delta_elevation = np.pi / 4.
+        #solid_azimuth=np.arange(0,2*np.pi+delta_elevation,delta_elevation)
+        #solid_angle = 1.0 / (delta_elevation * (np.cos(solid_azimuth) - np.cos(solid_azimuth + delta_azimuth)))
+
+        #solid_angle = normalize(solid_angle, [np.min(solid_angle), np.max(solid_angle)], [0, 1])
+
         keypoint_list = []
         for k in range(0, keypoints.shape[0]):
 
@@ -84,17 +89,14 @@ class KeyPointOrientation(object):
             self.azimuth = np.arctan2(temp_y, temp_x) + np.pi
 
             self.elevation = np.arctan2(temp_z,np.sqrt(temp_x ** 2 + temp_y ** 2))+np.pi/2
-            if np.min(self.elevation)<-np.pi/2.:
-                print "alalal"
 
-            solid_angle = 1 / (delta_elevation * (np.cos(self.azimuth) - np.cos(self.azimuth + delta_azimuth)))
-            solid_angle = normalize(solid_angle, [np.min(solid_angle), np.max(solid_angle)], [0, 1])
+
             self.magnitude = normalize(self.magnitude, [np.min(self.magnitude), np.max(self.magnitude)], [0, 1])
 
             self.gaussian_weight = normalize(self.gaussian_weight, [np.min(self.gaussian_weight),
                                                                     np.max(self.gaussian_weight)], [0, 1])
 
-            weights = self.magnitude * self.gaussian_weight * solid_angle
+            weights = self.magnitude * self.gaussian_weight #* solid_angle
             self.weights = normalize(weights, [np.min(weights), np.max(weights)], [0, 1])
 
             NO_xbin = 4
