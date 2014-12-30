@@ -23,13 +23,14 @@ class ReadMask(object):
                     file_temp = file(f, 'rb')
                     temp_file = np.load(file_temp)
                     mask = Masks(temp_file['prostate'], temp_file['bladder'], temp_file['rectum'], temp_file['femurR'],
-                                 temp_file['femurL'], temp_file['semi_vesicle'])
+                                 temp_file['femurL'], temp_file['semi_vesicle'],temp_file['sum'])
 
 
                 finally:
                     file_temp.flush()
                     file_temp.close()
             else:
+
                 Warning(f + ' wrong file- probably not mask file')
 
         return mask

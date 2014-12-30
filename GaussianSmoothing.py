@@ -26,7 +26,7 @@ class GaussianSmoothing2D(object):
         self.k = sqrt(2)
         self.image = ReadImage(self.path).openImage()[0]
         self.spacing = self.image.spacing
-        self.powers = np.arange(0, self.octave_size)
+        self.powers = np.arange(0, self.octave_size)/3.0
 
     def smoothing(self, sigma_zero):
         """

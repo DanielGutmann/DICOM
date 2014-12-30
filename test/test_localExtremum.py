@@ -11,7 +11,9 @@ import unittest
 class LocalExtrema3DTest(unittest.TestCase):
     def setUp(self):
         path = './test_data/1_nd/CT_analyses/3DDoG/'
-        self.local_extrema = LocalExterma3D(path)
+        path_mask = './test_data/1_nd/CT_analyses/'
+
+        self.local_extrema = LocalExterma3D(path,path_mask,True)
 
     def test_find(self):
         self.image3D_after_log = self.local_extrema.find()

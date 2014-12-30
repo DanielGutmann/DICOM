@@ -51,7 +51,7 @@ class ReadDirWithBinaryData(object):
         if np.max(self.Image3D) < 0.1:
             self.Image3D = self.Image3D.byteswap()
         #read spacing
-        self.spacing = np.fromfile(self.my_path + 'spacing.txt', dtype=self.data_type, sep="    ")
+        self.spacing = np.fromfile(self.my_path + 'spacing.txt', dtype=float, sep="    ")
         self.im_agregation=Image3D(self.Image3D,self.spacing,self.width,self.high,self.depth,0)
         SaveImage(path+'CT_analyses/').saveImage(self.im_agregation)
         print('Reading data done')

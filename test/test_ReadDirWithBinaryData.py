@@ -16,6 +16,7 @@ class readDicomTest(unittest.TestCase):
         self.assertEqual(self.Dicoms.get_image3D().shape, (512, 512, 74))
 
     def test_get_spacing(self):
+        print(self.Dicoms.get_spacing())
         self.assertEqual(True, array_equal(self.Dicoms.get_spacing(), array([0.9766, 0.9766, 5.0000])))
 
 
