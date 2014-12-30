@@ -23,7 +23,7 @@ class ReadMask(object):
                     file_temp = file(f, 'rb')
                     temp_file = np.load(file_temp)
                     mask = Masks(temp_file['prostate'], temp_file['bladder'], temp_file['rectum'], temp_file['femurR'],
-                                 temp_file['femurL'], temp_file['semi_vesicle'],temp_file['sum'])
+                                 temp_file['femurL'], temp_file['semi_vesicle'],temp_file['sum_mask'])
 
 
                 finally:

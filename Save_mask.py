@@ -18,7 +18,7 @@ class SaveMask(object):
 
         print('file is saving')
         savez(outfile, prostate=mask.prostate, bladder=mask.bladder, rectum=mask.rectum, femurR=mask.femurR,
-              femurL=mask.femurL, semi_vesicle=mask.semi_vesicle,sum=mask.sum)
+              femurL=mask.femurL, semi_vesicle=mask.semi_vesicle,sum_mask=mask.sum_mask)
         outfile.flush()
         outfile.close()
         print('file is saved')

@@ -41,7 +41,7 @@ class LocalExterma3D(object):
         for i in range(1, shape[0]):
             for j in range(1, shape[1]):
                 for z in range(1, shape[2]):
-                    if self.mask[i, j, z] == 1 and self.flag == True:  # this is fast version
+                    if self.mask.sum_mask[i, j, z] == 1 and self.flag == True:  # this is fast version
                         bool_array = image3D[i, j, z] > image3D[i - 1:i + 2, j - 1:j + 2, z - 1:z + 2]
                         sum = np.sum(bool_array)
                         if sum == 0:
