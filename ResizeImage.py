@@ -1,56 +1,40 @@
-from scipy.interpolate import interpn
-import numpy as np
-from scipy.misc import imresize
+from scipy.ndimage import zoom
+from Masks import keyPoints_in_organ, Masks
+from ReadImage import ReadImage
+from Read_Mask import ReadMask
+from SaveImage import SaveImage
+from Save_mask import SaveMask
+
+from Vizualization import visualization3D_notimage
 
 __author__ = 'Agnieszka'
 
 
-class ResizeImage2D(object):
-    def __init__(self, resize_factor=2):
-        self.resize_factor = resize_factor
-
-    def apply(self, image2D):
-        x = np.arange(0, image2D.shape[0]).astype(np.float)
-
-        index_value = np.linspace(0, x.size - 1, int(x.size / 2)).astype(dtype=np.int)
-        index_value[-1] = x.size - 1
-        # 1D array
-
-
-        one = np.ones((int(x.size / 2),)).astype(dtype=np.int)
-        list_for_grid_temp = []
-        for i in index_value:
-            list_for_grid_temp.append(np.array([x[index_value], x[i * one]]).T)
-        interpolate_grid = np.array(list_for_grid_temp)
-        # g0wno testy
-        image_after_resized = interpn((x, x), image2D, interpolate_grid, bounds_error=True,
-                                        fill_value=np.float32(0.0))
-        return image_after_resized
-
-
 class ResizeImage3D(object):
-    def __init__(self, resize_factor=2):
+    def __init__(self, path, octave_nd, resize_factor=0.5):
+        """
+
+        :param path:
+        :param octave_nd:
+        :param resize_factor:
+        """
+        self.octave_nd = octave_nd
+        self.path = path
         self.resize_factor = resize_factor
+        self.organs_names = ['rectum', 'prostate', 'bladder', 'femurL', 'femurR', 'semi_vesicle']
 
-    def apply(self, image3D):
-        x = np.arange(0, image3D.shape[0]).astype(np.float)
-        z = np.arange(0, image3D.shape[2]).astype(np.float)
-        index_value = np.linspace(0, x.size - 1, int(x.size / 2)).astype(dtype=np.int)
-        index_value[-1] = x.size - 1
-        # 1D array
+    def apply(self):
+        organs_dic = {}
+        masks = ReadMask(self.path).openMask()
+        for organ in self.organs_names:
+            organs_dic[organ] = zoom((eval('masks.' + organ)), self.resize_factor, order=1, mode='nearest',
+                                     prefilter=True)
 
-        index_value_z = np.linspace(0, z.size - 1, int(z.size / 2)).astype(dtype=np.int)
-        index_value_z[-1] = z.size - 1
-        one = np.ones(int(z.size / 2)).astype(dtype=np.int)
-        list_end = []
-
-        for j in index_value:
-            list_for_grid_temp = []
-            for i in index_value:
-                list_for_grid_temp.append(np.array([one * x[j], one * x[i], z[index_value_z]]).T)
-            list_end.append(list_for_grid_temp)
-        interpolate_grid = np.array(list_end)
-        # g0wno testy
-        image_after_resized = interpn((x, x, z), image3D, interpolate_grid, bounds_error=True,
-                                        fill_value=np.float32(0.0))
-        return image_after_resized
+        new_masks = Masks(organs_dic['prostate'], organs_dic['bladder'], organs_dic['rectum'],
+                          organs_dic['femurR'], organs_dic['femurL'], organs_dic['semi_vesicle'])
+        SaveMask(self.path[:-2] + str(self.octave_nd) + '/').saveMask(new_masks)
+        list_temp = ReadImage(self.path + '3DGaussianSmoothing').openImage()
+        image3D = list_temp[int(len(list_temp) / 2.)]
+        image3D.Image3D = zoom(image3D.Image3D, self.resize_factor, order=1, mode='nearest', prefilter=True)
+        SaveIm = SaveImage(self.path[:-2] + str(self.octave_nd) + '/')
+        SaveIm.saveImage(image3D)

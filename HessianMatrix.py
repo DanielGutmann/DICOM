@@ -55,6 +55,7 @@ class HessianMatrix(object):
 
                 pass
         print max(n), min(n),
+
         return self.get_key_points()
 
     def HessianElimination(self, path):

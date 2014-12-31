@@ -43,9 +43,8 @@ class OpenMask(object):
                     l.close()
         else:
             Warning(f + ' wrong file- probably not npy file')
-            
 
         self.mask_agregation = Masks(mask_dict['prostate'], mask_dict['bladder'], mask_dict['rectum'],
-                                    mask_dict['femurR'], mask_dict['femurL'],mask_dict['semi_vesicle'])
-        SaveMask(path+'CT_analyses/').saveMask(self.mask_agregation)
+                                     mask_dict['femurR'], mask_dict['femurL'], mask_dict['semi_vesicle'])
+        SaveMask(path + 'CT_analyses/1/').saveMask(self.mask_agregation)
         print('Reading data done')

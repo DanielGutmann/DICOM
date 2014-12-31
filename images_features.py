@@ -25,6 +25,7 @@ class KeypointsFeatures(object):
             for organ in self.organs_names:
 
                 #
+
                 i = im.keypoints_orientation[:, 0:3].astype(dtype=np.int16)
 
                 index = (eval('self.masks.' + organ)[i[:,0], i[:,1], i[:,2]] > 0.1)

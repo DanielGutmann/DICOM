@@ -63,11 +63,18 @@ class KeyPointOrientation(object):
         #solid_angle = normalize(solid_angle, [np.min(solid_angle), np.max(solid_angle)], [0, 1])
 
         keypoint_list = []
-        for k in range(0, keypoints.shape[0]):
 
-            i = keypoints[k][0]
-            j = keypoints[k][1]
-            z = keypoints[k][2]
+        for k in range(0, keypoints.shape[0]):
+            try:
+                i = keypoints[k][0]
+                j = keypoints[k][1]
+                z = keypoints[k][2]
+            except IndexError:
+                keypoint_list.append([0,0,0,0,0])
+                pass
+                continue
+
+
 
             temp_x = dx[i - self.size_of_window_x:i + self.size_of_window_x + 1,
                      j - self.size_of_window_x:j + self.size_of_window_x + 1,
