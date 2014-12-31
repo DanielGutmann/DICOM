@@ -101,18 +101,18 @@ class rotateImage(object):
                                          self.image3D.Image3D.shape[1] + 2 * twice_size_of_area,
                                          self.image3D.Image3D.shape[2] + 2 * twice_size_of_area]), dtype=np.float32)
 
-            key_point += 2 * self.size_of_area
+            key_point_temp =key_point + 2 * self.size_of_area
             temp_im[twice_size_of_area:temp_im.shape[0] - twice_size_of_area,
             twice_size_of_area:temp_im.shape[1] - twice_size_of_area,
             twice_size_of_area:temp_im.shape[2] - twice_size_of_area] = self.image3D.Image3D
 
-            area_begin = key_point[0] - self.size_of_area
-            area_end = key_point[0] + self.size_of_area + 1
-            area_begin_y = key_point[1] - self.size_of_area
-            area_end_y = key_point[1] + self.size_of_area + 1
-            area_begin_z = key_point[2] - np.ceil(
+            area_begin = key_point_temp[0] - self.size_of_area
+            area_end =key_point_temp[0] + self.size_of_area + 1
+            area_begin_y = key_point_temp[1] - self.size_of_area
+            area_end_y = key_point_temp[1] + self.size_of_area + 1
+            area_begin_z = key_point_temp[2] - np.ceil(
                 self.size_of_area / (self.image3D.spacing[2] / self.image3D.spacing[1]))
-            area_end_z = key_point[2] + np.ceil(
+            area_end_z = key_point_temp[2] + np.ceil(
                 self.size_of_area / (self.image3D.spacing[2] / self.image3D.spacing[1])) + 1
 
             Image3D = temp_im[area_begin:area_end, area_begin_y:area_end_y, area_begin_z:area_end_z]

@@ -7,7 +7,7 @@ from SaveImage import SaveImage
 __author__ = 'Agnieszka'
 
 import numpy as np
-
+#nie zrobione!
 
 class KeypointsDiscard(object):
     def __init__(self, path_images, path_mask):
