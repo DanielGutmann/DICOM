@@ -43,14 +43,15 @@ class HessianMatrix(object):
 
                 det_p_2 = img_dxx[i, j, z] * img_dzz[i, j, z] - img_dyz[i, j, z] ** 2 + img_dxx[i, j, z] * img_dzz[
                     i, j, z] - img_dzz[i, j, z] ** 2 + img_dxx[i, j, z] * img_dyy[i, j, z] - img_dxy[i, j, z] ** 2
-
-                if Det != 0.0:
-                    n.append(((Trace ** 3) / Det))
-                    if ((Trace ** 3) / Det) >= (((2 * self.threshold + 1) ** 3) / self.threshold_sqr):
-                        if Trace * Det > 0:
-                            if det_p_2 > 0:
-                                self.keypoints_list.append(keypoint)
-
+                try:
+                    if Det != 0.0:
+                        n.append(((Trace ** 3) / Det))
+                        if ((Trace ** 3) / Det) >= (((2 * self.threshold + 1) ** 3) / self.threshold_sqr):
+                            if Trace * Det > 0:
+                                if det_p_2 > 0:
+                                    self.keypoints_list.append(keypoint)
+                except FloatingPointError:
+                    pass
             except IndexError:
 
                 pass

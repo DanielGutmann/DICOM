@@ -44,20 +44,23 @@ class matrixHist(object):
         '''
         self.spacing = spacing
         # new grid in mm in range of 15 mm from 0-8 mm, with points on a cross in a ceneter of mask
+
         new_grid_range_x = np.arange(0, self.mask_shape / 2 + 1, 1)
         new_pixel_distance_x = np.sort(np.concatenate((-new_grid_range_x[1:], new_grid_range_x)))
         # new_pixel_distance_z = np.sort(np.concatenate((-new_grid_range_x[1:], new_grid_range_x)))
         # grid from mask in mm after rotate, spacing under consideration grid is irregular
+        grid_range_x = np.arange(0, ((mask.shape[0] / 2.) * self.spacing[0]), self.spacing[0])
+        grid_range_y = np.arange(0, ((mask.shape[1] / 2.) * self.spacing[1]), self.spacing[1])
+        grid_range_z = np.arange(0, ((mask.shape[2] / 2.) * self.spacing[2]), self.spacing[2])
 
-        grid_range_x = np.arange(0, (mask.shape[0] / 2.) * self.spacing[0], self.spacing[0])
-        grid_range_y = np.arange(0, (mask.shape[1] / 2.) * self.spacing[1], self.spacing[1])
-        grid_range_z = np.arange(0, (mask.shape[2] / 2.) * self.spacing[2], self.spacing[2])
         pixel_distance_x = np.sort(np.concatenate((-grid_range_x[1:], grid_range_x)))
         pixel_distance_y = np.sort(np.concatenate((-grid_range_y[1:], grid_range_y)))
         pixel_distance_z = np.sort(np.concatenate((-grid_range_z[1:], grid_range_z)))
 
         x, y, z = np.meshgrid(new_pixel_distance_x, new_pixel_distance_x, new_pixel_distance_x, indexing='ij')
         interpolate_grid = np.array([x[:, :, :], y[:, :, :], z[:, :, :]]).T
+
+
 
         new_mask = interpn((pixel_distance_x, pixel_distance_y, pixel_distance_z ), mask, interpolate_grid,
                            bounds_error=True, fill_value=np.float32(0.0))

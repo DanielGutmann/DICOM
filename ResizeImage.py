@@ -36,5 +36,6 @@ class ResizeImage3D(object):
         list_temp = ReadImage(self.path + '3DGaussianSmoothing').openImage()
         image3D = list_temp[int(len(list_temp) / 2.)]
         image3D.Image3D = zoom(image3D.Image3D, self.resize_factor, order=1, mode='nearest', prefilter=True)
+        image3D.spacing=image3D.spacing*2.
         SaveIm = SaveImage(self.path[:-2] + str(self.octave_nd) + '/')
         SaveIm.saveImage(image3D)

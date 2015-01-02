@@ -46,5 +46,5 @@ class OpenMask(object):
 
         self.mask_agregation = Masks(mask_dict['prostate'], mask_dict['bladder'], mask_dict['rectum'],
                                      mask_dict['femurR'], mask_dict['femurL'], mask_dict['semi_vesicle'])
-        SaveMask(path + 'CT_analyses/1/').saveMask(self.mask_agregation)
+        SaveMask(path + '/CT_analysesClassification/1/').saveMask(self.mask_agregation)
         print('Reading data done')

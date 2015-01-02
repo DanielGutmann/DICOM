@@ -12,9 +12,9 @@ class SaveFeatures(object):
         except OSError:
             pass
 
-    def saveFeatures(self, features):
+    def saveFeatures(self, features, sigma):
 
-        outfile = open(self.path + 'features.bin', 'wb')
+        outfile = open(self.path  + str(sigma) + 'features.bin', 'wb')
 
         print('file is saving')
         savez(outfile, prostate_key=features.prostate_keypoints, bladder_key=features.bladder_keypoints,

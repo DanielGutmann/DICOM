@@ -1,5 +1,5 @@
 from ReadImage import ReadImage
-from Vizualization import keypoints_vizualization
+from Vizualization import keypoints_vizualization, visualization3D
 from extramaSpace import ExtremaSpace3D
 from readNumpyImage import ReadNumpy
 
@@ -20,7 +20,8 @@ class ExtremaSpace3DTest(unittest.TestCase):
         path = './test_data/1_nd/CT_analyses/3DDoG/DoGSpaceExtremum3D/'
         list_with_images = ReadImage(path).openImage()
         for z in list_with_images:
-            keypoints_vizualization(z)
+            visualization3D(z)
+            #keypoints_vizualization(z)
 
 
 

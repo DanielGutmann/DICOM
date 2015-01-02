@@ -2,6 +2,9 @@ from matplotlib import cm
 from mayavi.tools.helper_functions import points3d
 import scipy
 from scipy.ndimage import affine_transform
+from Normalization import normalize
+from ReadImage import ReadImage
+from Vizualization import visualization3D_notimage, visualization3D
 from readNumpyImage import ReadNumpy
 
 __author__ = 'Agnieszka'
@@ -9,9 +12,21 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import numdifftools as nd
-x=np.zeros((6,8,10))
-print(np.dsplit(x,np.array([5,]))[0].shape)
-''''
+
+'''
+pixel_distance_x=np.linspace(-10,10,100)
+X, Y, Z = np.meshgrid(pixel_distance_x, pixel_distance_x,
+                                             pixel_distance_x)
+sigma_x=4
+sigma_z=2
+gaussian_weight = np.exp(-((X ** 2 + Y ** 2 ) / (2 * (sigma_x ** 2))+((Z ** 2 ) / (2 * (sigma_z ** 2)))))
+gaussian_weight=normalize(gaussian_weight,[gaussian_weight.min(),gaussian_weight.max()],[0,1])
+visualization3D_notimage(gaussian_weight)
+list_of_image = ReadImage('./test_data/1_nd/CT_analyses/2/').openImage()
+for Z in list_of_image:
+        visualization3D(Z)
+
+
 m = np.arange(0,27).reshape(3,3,3)
 
 

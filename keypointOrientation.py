@@ -1,6 +1,9 @@
 from math import ceil, pi
 import warnings
+
 from mayavi import mlab
+from mayavi.tools.helper_functions import barchart
+from mayavi.tools.show import show
 from Histogram2D import Histogram2D
 from Normalization import keypoints_concatenate, normalize
 from ReadImage import ReadImage
@@ -22,8 +25,9 @@ class KeyPointOrientation(object):
         self.PointReader = ReadImage(path_for_keypoints)
         self.list_with_keyponits = self.PointReader.openImage()
         self.spacing = self.list_with_keyponits[0].spacing
-        sigma_x = 4  # list_with_keyponits[0].sigma * 2 mask size is 9
-        self.size_in_pixels_xy = ceil(sigma_x)
+        self.size_in_pixels_xy = 3
+        sigma_x = self.size_in_pixels_xy*1.5  # list_with_keyponits[0].sigma * 2 mask size is 9
+
 
         x_range = np.arange(0, self.size_in_pixels_xy + 1)
         self.pixel_distance_x = np.sort(np.concatenate((-x_range[1:], x_range)))
@@ -111,7 +115,14 @@ class KeyPointOrientation(object):
 
             H2D = Histogram2D(NO_xbin, NO_ybin)
             H2D.apply(self.elevation, self.azimuth, weights)
-            # self.H2D = H2D.get_Histogram2D()
+            #self.H2D = H2D.get_Histogram2D()
+            #fig =figure()
+            from mpl_toolkits.mplot3d import Axes3D
+            #ax = fig.add_subplot(111,projection='3d')
+            #barchart(H2D.H)
+
+            #mlab.colorbar(nb_labels=2,label_fmt='%.1f')
+            #show()
             angles = H2D.get_Histogram2D_max()
             if angles.size == 4:
                 keypoint_list.append([i, j, z, angles[0][0], angles[0][1]])

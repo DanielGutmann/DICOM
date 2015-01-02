@@ -53,7 +53,7 @@ class ReadDirWithBinaryData(object):
         #read spacing
         self.spacing = np.fromfile(self.my_path + 'spacing.txt', dtype=float, sep="    ")
         self.im_agregation=Image3D(self.Image3D,self.spacing,self.width,self.high,self.depth,0)
-        SaveImage(path+'CT_analyses/1/').saveImage(self.im_agregation)
+        SaveImage(path+'/CT_analysesClassification/1/').saveImage(self.im_agregation)
         print('Reading data done')
 
     def get_image3D(self):

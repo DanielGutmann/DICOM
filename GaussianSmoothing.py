@@ -44,7 +44,7 @@ class GaussianSmoothing2D(object):
         im = self.image.Image3D[:, :, 20]
         saving = SaveImage(self.path + path_to_save)
         for sigma_x, sigma_y in zip(sigmas_x, sigmas_y):
-            image = normalize(im, [0, np.max(im)], [-1.0, 1.0])
+            image = normalize(im, [np.min(im), np.max(im)], [-1.0, 1.0])
             smoothed_image = gaussian_filter(image, (sigma_x, sigma_y))
             print(np.min(smoothed_image), np.max(smoothed_image))
             smoothed_image = normalize(smoothed_image, [-1.0, 1.0], [0.0, 1.0])
@@ -74,7 +74,7 @@ class GaussianSmoothing3D(GaussianSmoothing2D):
         for sigma_x, sigma_y, sigma_z in zip(sigmas_x, sigmas_y, sigmas_z):
             im = self.image.Image3D
 
-            image = normalize(im, [0, np.max(im)], [-1.0, 1.0])
+            image = normalize(im, [np.min(im), np.max(im)], [-1.0, 1.0])
 
             print('befor ', np.min(image), np.max(image))
             smoothed_image = gaussian_filter(image, (sigma_x, sigma_y, sigma_z))

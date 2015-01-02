@@ -1,7 +1,7 @@
 from matplotlib.pyplot import imshow, show
 from mayavi import mlab
 from mayavi.tools.helper_functions import points3d
-from numpy import concatenate
+from numpy import concatenate, ones
 from Normalization import keypoints_concatenate
 
 __author__ = 'Agnieszka'
@@ -29,18 +29,22 @@ def visualization3D_notimage(image3D):
     mlab.pipeline.image_plane_widget(src,
                                      plane_orientation='x_axes',
                                      slice_index=1,
-                                     colormap='black-white'
+                                    colormap='Set1'
+
+
     )
     mlab.pipeline.image_plane_widget(src,
                                      plane_orientation='z_axes',
                                      slice_index=1,
-                                     colormap='black-white'
+                                     colormap='Set1'
+
 
     )
 
+    mlab.colorbar(nb_labels=2)
 
-    #mlab.pipeline.iso_surface(src, contours=[s.min()+0.1*s.ptp(), ], opacity=0.5)
-    #mlab.pipeline.iso_surface(src, contours=[s.max()-0.1*s.ptp(), ],)
+
+    #mlab.pipeline.iso_surface(src, contours=[s.min()+0.1*s.ptp()], opacity=0.3,colormap='Set1')
 
     mlab.outline()
 
@@ -72,7 +76,9 @@ def visualization3D(image3D):
                                      colormap='black-white'
 
     )
-
+    print(image3D.Image3D.shape)
+    #index = keypoints_concatenate(image3D)
+    #mlab.points3d(index[:, 0]*image3D.spacing[0], index[:, 1]*image3D.spacing[0], index[:, 2]*image3D.spacing[2],scale_factor=4)
 
     #mlab.pipeline.iso_surface(src, contours=[s.min()+0.1*s.ptp(), ], opacity=0.5)
     #mlab.pipeline.iso_surface(src, contours=[s.max()-0.1*s.ptp(), ],)
@@ -86,11 +92,13 @@ def keypoints_vizualization(Image3D):
     print(Image3D.keypoints_max.shape[0], Image3D.keypoints_min.shape[0])
     index = keypoints_concatenate(Image3D)
     print(index[:, 2].max(),index[:, 2].min())
-    points3d(index[:, 0], index[:, 1], index[:, 2], mode='point')
+    size=ones((index.shape[0]))
+    points3d(index[:, 0], index[:, 1], index[:, 2]*5,scale_factor=4)
     mlab.show()
 
 def keypointsOrinetation_vizualization(Image3D):
     index = Image3D.keypoints_orientation
+    size=ones((index.shape[0],1))
     points3d(index[:, 0], index[:, 1], index[:, 2], mode='point')
     #x=sin()*cos()
     mlab.show()

@@ -1,3 +1,4 @@
+import os
 from DoG import DoG
 from GaussianSmoothing import GaussianSmoothing3D
 from HessianMatrix import HessianMatrix
@@ -19,8 +20,9 @@ class SIFT3D(object):
         self.path = path
 
     def SIFTgrain(self, octave):
-        path_analyse = '/CT_analyses/' + octave
+        path_analyse = '/CT_analysesClassification/' + octave
         octaves = 6
+
         initial_sigma = 1.1
         gauss = GaussianSmoothing3D(self.path + path_analyse, octaves).smoothing(initial_sigma)
         dimension = 3
@@ -33,8 +35,9 @@ class SIFT3D(object):
         path_local_extrema = '/3DLocalExtremum/'
         extrema = ExtremaSpace3D(self.path + path_analyse + pathDoG + path_local_extrema)
         extrema.find()
-        Hessian = HessianMatrix(40.0)
+        Hessian = HessianMatrix(5.0)
         Hessian.HessianElimination(self.path + path_analyse)
+
         keypointorientation = KeyPointOrientation(self.path + path_analyse)
         keypointorientation.apply()
         path_keypoint_orientation = '/KeyPointsOrientation/'
@@ -47,29 +50,29 @@ class SIFT3D(object):
 
     def apply(self):
         # first scale
-        '''
+
         self.Dicoms = ReadDirWithBinaryData(self.path)
         mask = OpenMask(self.path)
         self.SIFTgrain('1/')
-        self.resize = ResizeImage3D(self.path + '/CT_analyses/1/', 2).apply()
-        self.SIFTgrain('2/')'''
-        self.resize = ResizeImage3D(self.path + '/CT_analyses/2/', 3).apply()
+        self.resize = ResizeImage3D(self.path + '/CT_analysesClassification/1/', 2).apply()
+        self.SIFTgrain('2/')
+        self.resize = ResizeImage3D(self.path + '/CT_analysesClassification/2/', 3).apply()
         self.SIFTgrain('3/')
 
 
-    def test_something(self):
-        self.keydis.apply()
+import time
 
-
-    def test_apply(self):
-        import time
-
-        c = time.clock()
-        self.rotate.apply()
-        print(c - time.clock())
-
-
-
+if __name__ == '__main__':
+    c = time.clock()
+    for i in range(1, 43):
+        try:
+            path = 'D:/dane/' + str(i) + '_nd/'
+            if not os.path.exists(path):
+                raise IOError
+        except IOError:
+            continue
+        sift = SIFT3D(path).apply()
+    print(c - time.clock())
 
 
 
