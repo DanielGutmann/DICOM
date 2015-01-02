@@ -15,13 +15,14 @@ class FeaturePreprocessor():
         self.list_with_features_object['femurR'] = []
         self.list_with_features_object['femurL'] = []
         self.list_with_features_object['semi_vesicle'] = []
+        self.organs_names = ['rectum', 'prostate', 'bladder', 'femurL', 'femurR', 'semi_vesicle']
 
     def apply(self):
 
         path = '/CT_analysesClassification/'
 
         for i in range(1, 4):
-
+            i=1
             try:
                 path = self.path+'/'+ str(i) + '_nd//CT_analysesClassification/'
                 if not os.path.exists(path):
@@ -33,35 +34,19 @@ class FeaturePreprocessor():
                 print(path_temp)
                 feature_list = FeatureReader(path_temp).open()
                 for feature in feature_list:
-
-                    if feature.prostate_keypoints.size != 0:
-                        for e in feature.prostate_keypoints:
-                            self.list_with_features_object['prostate'].append(e)
-                    if feature.bladder_keypoints.size != 0:
-                        for e in feature.bladder_keypoints:
-                            self.list_with_features_object['bladder'].append(e)
-                    if feature.rectum_keypoints.size != 0:
-                        for e in feature.rectum_keypoints:
-                            self.list_with_features_object['rectum'].append(e)
-                    if feature.femurR_keypoints.size != 0:
-                        for e in feature.femurR_keypoints:
-                             self.list_with_features_object['femurR'].append(e)
-                    if feature.femurL_keypoints.size != 0:
-                        for e in feature.femurL_keypoints:
-                            self.list_with_features_object['femurL'].append(e)
-                    if feature.semi_vesicle_keypoints.size != 0:
-                        for e in feature.semi_vesicle_keypoints:
-                            self.list_with_features_object['semi_vesicle'].append(e)
+                    for orgnas in self.organs_names:
+                        if eval('feature.'+orgnas+'_keypoints.size') != 0:
+                            for e in eval('feature.'+orgnas+'_keypoints'):
+                                self.list_with_features_object[orgnas].append(e[3:])
 
 
     def get_feature(self):
         dic_temp = {}
+        for orgnas in self.organs_names:
+            dic_temp[orgnas] = array(self.list_with_features_object[orgnas])
 
-        dic_temp['prostate'] = array(self.list_with_features_object['prostate'])
-        print(dic_temp['prostate'].shape)
-        dic_temp['bladder'] = array(self.list_with_features_object['bladder'])
-        dic_temp['bladder'] = array(self.list_with_features_object['femurL'])
-        dic_temp['femurR'] = array(self.list_with_features_object['femurR'])
-        dic_temp['femurL'] = array(self.list_with_features_object['femurL'])
-        dic_temp['semi_vesicle'] = array(self.list_with_features_object['semi_vesicle'])
         return dic_temp
+
+    def get_data_for_classificator(self):
+        data=self.get_feature()
+        #for e in data
