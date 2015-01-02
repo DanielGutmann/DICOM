@@ -19,6 +19,9 @@ class FeaturePreprocessorTest(unittest.TestCase):
     def test_get_features(self):
         dic = self.feature_preprocessor.get_feature()
 
+    def test_get_classificator(self):
+        dic = self.feature_preprocessor.get_data_for_classificator()
+
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 import os
-from numpy import array, concatenate
+from numpy import array, concatenate, hstack, ones
 from IOSift.FeatureReader import FeatureReader
 
 __author__ = 'Agnieszka'
@@ -49,4 +49,10 @@ class FeaturePreprocessor():
 
     def get_data_for_classificator(self):
         data=self.get_feature()
-        #for e in data
+        label={}
+        i=0
+        for orgnas in self.organs_names:
+            i+=1
+            data[orgnas]=concatenate((data[orgnas],ones((data[orgnas].shape[0],1))*i),axis=1)
+            label[orgnas]=i
+        return data,label
