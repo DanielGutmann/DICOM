@@ -5,7 +5,7 @@ from IOSift.FeatureReader import FeatureReader
 __author__ = 'Agnieszka'
 
 
-class FeaturePreprocessor():
+class FeaturePreprocessorPatient():
     def __init__(self, path):
         self.path = path
         self.list_with_features_object = {}
@@ -37,7 +37,9 @@ class FeaturePreprocessor():
                     for orgnas in self.organs_names:
                         if eval('feature.'+orgnas+'_keypoints.size') != 0:
                             for e in eval('feature.'+orgnas+'_keypoints'):
-                                self.list_with_features_object[orgnas].append(e[3:])
+
+                                self.list_with_features_object[orgnas].append(concatenate((e[3:],[i])))
+
 
 
     def get_feature(self):
@@ -55,7 +57,7 @@ class FeaturePreprocessor():
         for orgnas in self.organs_names:
             i+=1
             data[orgnas]=concatenate((data[orgnas],ones((data[orgnas].shape[0],1))*i),axis=1)
-            label[orgnas]=i
+            label[i]=orgnas
             if i==1:
                 data_temp=data[orgnas]
             else:

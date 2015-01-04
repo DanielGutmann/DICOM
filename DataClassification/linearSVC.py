@@ -1,3 +1,5 @@
+__author__ = 'Agnieszka'
+__author__ = 'Agnieszka'
 from DataClassification.FeaturePreprocessor import FeaturePreprocessor
 
 __author__ = 'Agnieszka'
@@ -26,18 +28,13 @@ h = .02  # step size in the mesh
 # we create an instance of SVM and fit out data. We do not scale our
 # data since we want to plot the support vectors
 C = 1.0  # SVM regularization parameter
-svc = svm.SVC(kernel='linear', C=C)
-print('svc')
-rbf_svc = svm.SVC(kernel='rbf', gamma=0.7, C=C)
-print('rbf')
-poly_svc = svm.SVC(kernel='poly', degree=3, C=C)
-print('poly')
-lin_svc = svm.LinearSVC(C=C)
-print('lin')
+#svc = svm.SVC(kernel='linear', C=C)
 
 # create a mesh to plot in
 
-classificator_list=[svc,rbf_svc,poly_svc,lin_svc]
+classificator_list=[]
+for i in range (1,10):
+    classificator_list.append(svm.LinearSVC(C=i/10.))
 result=[]
 if __name__ == '__main__':
     for c in classificator_list:
@@ -51,6 +48,8 @@ print(result)
 ex=np.arange(0,len(result))
 plt.figure()
 plt.errorbar(ex,result[:,0],yerr= result[:,1],fmt='o',)
+plt.xlim([-0.5,6])
+plt.ylim([-1.3,1.3])
 plt.show()
 
 

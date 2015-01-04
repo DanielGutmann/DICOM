@@ -49,6 +49,7 @@ class matrixHist(object):
         new_pixel_distance_x = np.sort(np.concatenate((-new_grid_range_x[1:], new_grid_range_x)))
         # new_pixel_distance_z = np.sort(np.concatenate((-new_grid_range_x[1:], new_grid_range_x)))
         # grid from mask in mm after rotate, spacing under consideration grid is irregular
+        print(spacing)
         grid_range_x = np.arange(0, ((mask.shape[0] / 2.) * self.spacing[0]), self.spacing[0])
         grid_range_y = np.arange(0, ((mask.shape[1] / 2.) * self.spacing[1]), self.spacing[1])
         grid_range_z = np.arange(0, ((mask.shape[2] / 2.) * self.spacing[2]), self.spacing[2])
@@ -56,7 +57,8 @@ class matrixHist(object):
         pixel_distance_x = np.sort(np.concatenate((-grid_range_x[1:], grid_range_x)))
         pixel_distance_y = np.sort(np.concatenate((-grid_range_y[1:], grid_range_y)))
         pixel_distance_z = np.sort(np.concatenate((-grid_range_z[1:], grid_range_z)))
-
+        print(pixel_distance_x.max(),pixel_distance_y.max(),pixel_distance_z.max())
+        print(new_grid_range_x.max())
         x, y, z = np.meshgrid(new_pixel_distance_x, new_pixel_distance_x, new_pixel_distance_x, indexing='ij')
         interpolate_grid = np.array([x[:, :, :], y[:, :, :], z[:, :, :]]).T
 

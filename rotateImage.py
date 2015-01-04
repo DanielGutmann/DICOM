@@ -131,8 +131,8 @@ class rotateImage(object):
         y = np.array([0, Image3D.shape[1] - 1, 0]).dot(transform.T)
         z = np.array([Image3D.shape[0] - 1, 0, 0]).dot(transform.T)
         spacing = np.array([self.image3D.spacing[0], self.image3D.spacing[1], self.image3D.spacing[2]]).dot(transform.T)
-        if (np.abs(spacing) < 0.1).sum() > 0:
-            index = np.abs(spacing) < 0.01
+        if (np.abs(spacing) < 0.2).sum() > 0:
+            index = np.abs(spacing) < 0.2
             spacing[index] = self.image3D.spacing[index]
 
         s = np.abs(x) + np.abs(y) + np.abs(z) + 1

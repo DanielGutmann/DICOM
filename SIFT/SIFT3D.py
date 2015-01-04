@@ -64,7 +64,7 @@ import time
 
 if __name__ == '__main__':
     c = time.clock()
-    for i in range(16, 43):
+    for i in range(32, 43):
         try:
             path = 'D:/dane/' + str(i) + '_nd/'
             if not os.path.exists(path):

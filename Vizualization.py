@@ -21,30 +21,31 @@ def visualization3D_notimage(image3D):
     :param image3D: image object from readDirWithBinaryDAta
     :return:
     """
+
     s=image3D
     src = mlab.pipeline.scalar_field(image3D)
-
-    src.update_image_data = True
-
+    src.spacing=[1,1,5]
+    src.update_image_data = (1,1,5)
+    '''
     mlab.pipeline.image_plane_widget(src,
                                      plane_orientation='x_axes',
                                      slice_index=1,
-                                    colormap='Set1'
+                                    colormap='black-white'
 
 
     )
     mlab.pipeline.image_plane_widget(src,
                                      plane_orientation='z_axes',
                                      slice_index=1,
-                                     colormap='Set1'
+                                     colormap='black-white'
 
 
     )
+    '''
 
-    mlab.colorbar(nb_labels=2)
 
 
-    #mlab.pipeline.iso_surface(src, contours=[s.min()+0.1*s.ptp()], opacity=0.3,colormap='Set1')
+    mlab.pipeline.iso_surface(src, contours=[0.5,1], opacity=1,colormap='black-white')
 
     mlab.outline()
 
@@ -81,7 +82,8 @@ def visualization3D(image3D):
     #mlab.points3d(index[:, 0]*image3D.spacing[0], index[:, 1]*image3D.spacing[0], index[:, 2]*image3D.spacing[2],scale_factor=4)
 
     #mlab.pipeline.iso_surface(src, contours=[s.min()+0.1*s.ptp(), ], opacity=0.5)
-    #mlab.pipeline.iso_surface(src, contours=[s.max()-0.1*s.ptp(), ],)
+    print(0.1*s.ptp())
+    mlab.pipeline.iso_surface(src, contours=[s.max()-1300, ],colormap='hsv')
 
     mlab.outline()
 
