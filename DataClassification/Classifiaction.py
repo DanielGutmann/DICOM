@@ -20,6 +20,8 @@ data,label=feature_preprocessor.get_data_for_classificator()
 X = data[:,:-1]
                       # avoid this ugly slicing by using a two-dim dataset
 y = data[:,-1]
+X = X[y != 6]
+y = y[y != 6]
 
 h = .02  # step size in the mesh
 
@@ -28,7 +30,7 @@ h = .02  # step size in the mesh
 C = 1.0  # SVM regularization parameter
 svc = svm.SVC(kernel='linear', C=C)
 print('svc')
-rbf_svc = svm.SVC(kernel='rbf', gamma=0.7, C=C)
+rbf_svc = svm.SVC(kernel='rbf', gamma=0.1, C=C)
 print('rbf')
 poly_svc = svm.SVC(kernel='poly', degree=3, C=C)
 print('poly')
@@ -37,20 +39,13 @@ print('lin')
 
 # create a mesh to plot in
 
-classificator_list=[svc,rbf_svc,poly_svc,lin_svc]
+c=[rbf_svc]
 result=[]
 if __name__ == '__main__':
-    for c in classificator_list:
-        temp = cross_validation.cross_val_score(c, X,y, cv=5)
-        print(str(c))
-        result.append(np.array([temp.mean(),temp.std()]))
+        temp = cross_validation.cross_val_score(c[0], X,y, cv=10,n_jobs=4)
+        print(temp.mean(),temp.std())
 
 
-result=np.array(result)
-print(result)
-ex=np.arange(0,len(result))
-plt.figure()
-plt.errorbar(ex,result[:,0],yerr= result[:,1],fmt='o',)
-plt.show()
+
 
 

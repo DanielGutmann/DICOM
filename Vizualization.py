@@ -91,10 +91,12 @@ def visualization3D(image3D):
 
 
 def keypoints_vizualization(Image3D):
-    print(Image3D.keypoints_max.shape[0], Image3D.keypoints_min.shape[0])
+    #print(Image3D.keypoints_max.shape[0], Image3D.keypoints_min.shape[0])
+
     index = keypoints_concatenate(Image3D)
-    print(index[:, 2].max(),index[:, 2].min())
+
     size=ones((index.shape[0]))
+    print('wielkosc',index.shape)
     points3d(index[:, 0], index[:, 1], index[:, 2]*5,scale_factor=4)
     mlab.show()
 

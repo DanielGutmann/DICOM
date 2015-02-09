@@ -19,6 +19,13 @@ class FeaturePreprocessorTest(unittest.TestCase):
 
     def test_get_features(self):
         dic = self.feature_preprocessor.get_feature()
+        self.organs_names = ['rectum', 'prostate', 'bladder', 'femurL', 'femurR', 'semi_vesicle']
+        import numpy as np
+        for orgnas in self.organs_names:
+                x=np.bincount(dic[orgnas][:,-1].astype(dtype=np.int8))
+                x=x[x!=0]
+                print(x)
+                print(orgnas,x.mean(),x.std())
 
     def test_get_classificator(self):
         dic = self.feature_preprocessor.get_data_for_classificator()

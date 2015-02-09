@@ -16,6 +16,9 @@ def normalize(image, range_of_image, new_range):
     return im
 
 def keypoints_concatenate(Image3D):
+    #Image3D.keypoints_max=array(Image3D.keypoints_max)
+    #Image3D.keypoints_min=array(Image3D.keypoints_min)
+
     if Image3D.keypoints_max.shape[0] == 0 and Image3D.keypoints_min.shape[0]==0:
         return array([0,0,0])
     elif Image3D.keypoints_max.shape[0] == 0:

@@ -39,7 +39,7 @@ class ReadImage(object):
                     file_temp.close()
             else:
                 Warning(f + ' wrong file- probably not npy file')
-                return self.ImagesList
+                #return self.ImagesList
         return self.ImagesList
         print('Reading data done')
 

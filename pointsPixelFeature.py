@@ -1,3 +1,8 @@
+from ReadImage import ReadImage
+from Vizualization import visualization3D
+
+__author__ = 'Agnieszka'
+
 import os
 from numpy import array, concatenate, hstack, ones
 from IOSift.FeatureReader import FeatureReader
@@ -5,7 +10,7 @@ from IOSift.FeatureReader import FeatureReader
 __author__ = 'Agnieszka'
 
 
-class FeaturePreprocessorPatient():
+class pointsPixelFeature():
     def __init__(self, path):
         self.path = path
         self.list_with_features_object = {}
@@ -20,7 +25,10 @@ class FeaturePreprocessorPatient():
     def apply(self):
 
         path = '/CT_analysesClassification/'
-
+        octave_dict={}
+        octave_dict[1]=[]
+        octave_dict[2]=[]
+        octave_dict[3]=[]
         for i in range(1, 43):
 
             try:
@@ -29,16 +37,27 @@ class FeaturePreprocessorPatient():
                     raise IOError
             except IOError:
                 continue
+
             for o in range(1, 4):
+                k=0
                 path_temp = path + str(o) + '/FullFeature/'
                 print(path_temp)
                 feature_list = FeatureReader(path_temp).open()
-                for feature in feature_list:
+                image_list=ReadImage(path_temp).openImage()
+                print(len(feature_list),len(image_list))
+                for feature,image in zip(feature_list,image_list):
                     for orgnas in self.organs_names:
                         if eval('feature.'+orgnas+'_keypoints.size') != 0:
                             for e in eval('feature.'+orgnas+'_keypoints'):
+                                k=k+1
 
-                                self.list_with_features_object[orgnas].append(concatenate((e[3:],[i])))
+
+                                self.list_with_features_object[orgnas].append(concatenate((image.Image3D[e[0]-2:e[0]+3,e[1]-2:e[1]+3,e[2]].flatten(),[i])))
+
+
+
+
+                octave_dict[o].append(k)
 
 
 

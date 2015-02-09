@@ -20,7 +20,10 @@ class FeaturePreprocessor():
     def apply(self):
 
         path = '/CT_analysesClassification/'
-
+        octave_dict={}
+        octave_dict[1]=[]
+        octave_dict[2]=[]
+        octave_dict[3]=[]
         for i in range(1, 43):
 
             try:
@@ -29,7 +32,9 @@ class FeaturePreprocessor():
                     raise IOError
             except IOError:
                 continue
+
             for o in range(1, 4):
+                k=0
                 path_temp = path + str(o) + '/FullFeature/'
                 print(path_temp)
                 feature_list = FeatureReader(path_temp).open()
@@ -37,7 +42,14 @@ class FeaturePreprocessor():
                     for orgnas in self.organs_names:
                         if eval('feature.'+orgnas+'_keypoints.size') != 0:
                             for e in eval('feature.'+orgnas+'_keypoints'):
+                                k=k+1
                                 self.list_with_features_object[orgnas].append(e[3:])
+
+                octave_dict[o].append(k)
+        print(octave_dict[2])
+        print(array(octave_dict[1]).mean(),array(octave_dict[1]).std())
+        print(array(octave_dict[2]).mean(),array(octave_dict[2]).std())
+        print(array(octave_dict[3]).mean(),array(octave_dict[3]).std())
 
 
     def get_feature(self):

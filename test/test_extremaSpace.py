@@ -19,8 +19,10 @@ class ExtremaSpace3DTest(unittest.TestCase):
     def test_show(self):
         path = './test_data/1_nd/CT_analyses/3DDoG/DoGSpaceExtremum3D/'
         list_with_images = ReadImage(path).openImage()
+        keypoints_vizualization(list_with_images[-1])
+
         for z in list_with_images:
-            visualization3D(z)
+            keypoints_vizualization(z)
             #keypoints_vizualization(z)
 
 

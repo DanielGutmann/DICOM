@@ -40,7 +40,7 @@ class ExtremaSpace3D(object):
             print(len(list_with_three_images_3D))
             min_index = list_with_im[i].keypoints_min
             max_index = list_with_im[i].keypoints_max
-
+            print(list_with_im[i].keypoints_min.shape)
             for min_idx in min_index:
                 i = min_idx[0]
                 j = min_idx[1]
